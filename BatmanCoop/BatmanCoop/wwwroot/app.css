@@ -189,3 +189,11 @@ code {
         right: unset;
     }
 }
+
+fluent-text-field::part(root), fluent-number-field::part(root) {
+    background: none !important;
+}
+
+fluent-select::part(control) {
+    background: none !important;
+}

@@ -1,0 +1,19 @@
+﻿@page "/member-info"
+
+
+<EditForm Model="@Obj" FormName="add_form" OnValidSubmit="OnSaveData">
+    <DataAnnotationsValidator />
+
+    <div>
+        <div class="form-group mb-3">
+            <label class="form-label">Member Code</label>
+            <InputText @bind-Value="Obj.MemberNo" readonly class="form-control" style="font-weight:500;" />
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label">Last Name</label>
+            <InputText @bind-Value="Obj.LastName" class="form-control" />
+            
+        </div>
+    </div>
+
+</EditForm>

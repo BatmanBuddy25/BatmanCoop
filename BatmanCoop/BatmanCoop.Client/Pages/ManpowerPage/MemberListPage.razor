@@ -1,0 +1,39 @@
+﻿@page "/member-list"
+
+@rendermode InteractiveAuto
+
+
+<PageTitle>Member List</PageTitle>
+
+
+<FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
+    <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="OnAddMember">
+        Add
+    </FluentButton>
+</FluentStack>
+
+
+<FluentDataGrid Items="@IList_Mem"
+                Pagination="@pagination"
+                ShowHover="true"
+                GenerateHeader="GenerateHeaderOption.Sticky"
+                
+                Style="height: 100%;overflow:auto;">
+    <ChildContent>
+        <PropertyColumn Property="@(a => a.MemberNo)" Title="Member No." Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.LastName)" Title="Last Name" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.FirstName)" Title="First Name" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.Contact)" Title="Contact No." Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.ReferralName)" Title="Referal Name" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.RegisterDate)" Title="Register Date" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.MemStatus)" Title="Status" Width=".5fr" Sortable="true" />
+    </ChildContent>
+    <EmptyContent>
+        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+            <div> No Data Found</div>
+        </FluentStack>
+    </EmptyContent>
+</FluentDataGrid>
+<FluentPaginator State="@pagination" />
+
+

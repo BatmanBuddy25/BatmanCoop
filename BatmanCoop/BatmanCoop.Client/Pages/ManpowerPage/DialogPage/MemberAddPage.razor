@@ -1,0 +1,134 @@
+﻿@using BatmanCoopShared.Model.MasterDataModel
+
+
+@implements IDialogContentComponent
+
+<FluentDialogHeader ShowDismiss="true">
+    <div class="d-flex flex-column">
+        <FluentLabel Typo="Typography.PaneHeader">
+            New Member
+        </FluentLabel>
+    </div>
+</FluentDialogHeader>
+
+
+<EditForm Model="@Obj">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row" >
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label class="form-label">Last Name:</label>
+                <FluentTextField @bind-Value="Obj.LastName" Class="form-control"/>
+                <ValidationMessage For="@(() => Obj.LastName)" />
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label class="form-label">First Name:</label>
+                <FluentTextField @bind-Value="Obj.FirstName" Class="form-control" />
+                <ValidationMessage For="@(() => Obj.FirstName)" />
+            </div>          
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label class="form-label">Middle Name:</label>
+                <FluentTextField @bind-Value="Obj.MiddleName" Class="form-control" />
+                <ValidationMessage For="@(() => Obj.MiddleName)" />
+            </div>           
+        </div>
+    </div>
+    <br/>
+    <div class="row" >
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Full Address:</label>
+                <FluentTextField @bind-Value="Obj.FullAddress" Class="form-control" />
+                <ValidationMessage For="@(() => Obj.FullAddress)" />
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
+            <div class="form-group">
+                <label class="form-label">Birth Date:</label>                
+                <FluentDatePicker @bind-Value="@Obj.BirthDate" @bind-Value:after="OnCalculateAge"  class="form-control" />
+                <ValidationMessage For="@(() => Obj.LastName)" />
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+                <label class="form-label">Age:</label>
+                <FluentNumberField @bind-Value="Obj.Age" Class="form-control" ReadOnly="true"/>
+                <ValidationMessage For="@(() => Obj.Age)" />
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+            <div class="form-group">
+                <label class="form-label">Civil Status:</label>                
+                <FluentSelect TOption="CivilStatus"
+                              Items="@CivilStatus_List"
+                              Placeholder="Select civil status"
+                              OptionValue="@(p => p.Id.ToString())"
+                              OptionText="@(p => p.Description)"
+                              @bind-Value="@Obj.CivilStatus"
+                              @bind-SelectedOption="@SelectCivil" 
+                              Width="200px"
+                              Class="form-control" />
+                <ValidationMessage For="@(() => Obj.CivilStatus)" />
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label class="form-label">Contact No:</label>
+                <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Bottom">
+                    <label class="form-label">+63</label>
+                    <FluentTextField @bind-Value="Obj.Contact" Class="form-control" Maxlength="10"/>
+                </FluentStack>
+                
+                <ValidationMessage For="@(() => Obj.Contact)" />
+            </div>
+        </div>
+    </div>
+    <br />
+   
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Referal Name:</label>
+                <FluentSelect TOption="MemberM"
+                              Items="@ReferalList"
+                              Width="100%"
+                              Placeholder="Select referal"
+                              OptionValue="@(p => p.MemberNo)"
+                              OptionText="@(p => p.LastName + " , " + p.FirstName )"
+                              @bind-Value="@Obj.MemberNo"
+                              @bind-SelectedOption="@SelectReferal"
+                              Class="form-control" />
+                <ValidationMessage For="@(() => Obj.ReferralName)" />
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+<FluentDialogFooter>
+   <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Save())" Appearance="Appearance.Accent" OnClick="OnSaveData" >
+            Save
+        </FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size16.LockClosed())" Appearance="Appearance.Accent" OnClick="OnCloseDialog">
+            Cancel
+        </FluentButton>
+   </FluentStack>
+</FluentDialogFooter>
+
+

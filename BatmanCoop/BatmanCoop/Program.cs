@@ -1,5 +1,8 @@
-using BatmanCoop.Client.Pages;
 using BatmanCoop.Components;
+using BatmanCoop.DatabaseContext;
+using BatmanCoop.Repository.ManpowerRepository;
+using BatmanCoopShared.Interfaces.ManpowerInterface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +11,33 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+
+
+
+builder.Services.AddScoped(http => new HttpClient
+{
+    BaseAddress = new Uri(builder.Configuration.GetSection("BaseAddress").Value!)
+});
+
+builder.Services.AddDbContext<DataBaseConfiguration>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 builder.Services.AddFluentUIComponents();
+builder.Services.AddDataGridEntityFrameworkAdapter();
+
+builder.Services.AddServerSideBlazor().AddCircuitOptions(option => { option.DetailedErrors = true; });
+
+builder.Services.AddControllers();
+
+
+builder.Services.AddScoped<IDialogService, DialogService>();
+builder.Services.AddScoped<IToastService, ToastService>();
+
+//Manpower
+builder.Services.AddScoped<IMemberInt, MemberRepo>();
 
 var app = builder.Build();
 
@@ -24,6 +53,7 @@ else
     app.UseHsts();
 }
 
+app.MapControllers();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
