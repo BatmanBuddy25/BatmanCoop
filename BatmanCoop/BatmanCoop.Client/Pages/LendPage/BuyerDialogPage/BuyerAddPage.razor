@@ -1,0 +1,56 @@
+﻿@implements IDialogContentComponent
+
+
+
+
+<FluentDialogHeader ShowDismiss="true">
+    <div class="d-flex flex-column">
+        <FluentLabel Typo="Typography.PaneHeader">
+            New Buyer
+        </FluentLabel>
+    </div>
+</FluentDialogHeader>
+
+
+<EditForm Model="@Obj">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+@* 
+    <div>
+        <label class="form-label">Member Name:</label>
+        <FluentSelect TOption="MemberM"
+                      Items="@MemberList"
+                      Placeholder="Select member"
+                      OptionValue="@(p => p.MemberNo)"
+                      OptionText="@(p => p.LastName + " , " + p.FirstName )"
+                      @bind-Value="@Obj"
+                      @bind-SelectedOption="@SelectMember"
+                      Width="200px"
+                      Class="form-control" />
+        <ValidationMessage For="@(() => Obj.MemMId)" />
+    </div> *@
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Member Name:</label>
+                    <FluentAutocomplete Placeholder="search"
+                                    OnOptionsSearch="@OnSearch"
+                                    TOption="MemberM"
+                                    Width="100%"
+                                    OptionText="@(p => p.LastName + " , " + p.FirstName )"
+                    OptionStyle="min-height: 40px;"
+                    MaximumOptionsSearch="int.MaxValue"
+                    MaximumSelectedOptions="1"
+                                    @bind-SelectedOptions="@SelectMember"/>
+                    <ValidationMessage For="@(() => Obj.MemMId)" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<FluentDialogFooter >
+
+</FluentDialogFooter>
+
+

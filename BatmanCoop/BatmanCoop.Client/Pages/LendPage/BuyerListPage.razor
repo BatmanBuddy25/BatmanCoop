@@ -1,0 +1,40 @@
+﻿@page "/buyer-list"
+
+@rendermode InteractiveAuto
+
+
+<PageTitle>Buyer List</PageTitle>
+
+
+<FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
+    <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="OnAddBuyer">
+        Add
+    </FluentButton>
+</FluentStack>
+
+
+<FluentDataGrid Items="@IList_Buyer"
+                Pagination="@pagination"
+                ShowHover="true"
+                GenerateHeader="GenerateHeaderOption.Sticky"                
+                Style="height: 100%;overflow:auto;" >
+                
+    <ChildContent>
+        <PropertyColumn Property="@(a => a.MemM!.MemberNo)" Title="Member No." Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => $"{a.MemM!.LastName}, {a.MemM!.FirstName}")" Title="Member Name" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.Share_Capital)" Title="Capital" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.Share_Points)" Title="Points" Width=".5fr" Sortable="true" />
+            <PropertyColumn Property="@(a => a.Created_Date.ToShortDateString())" Title="Date" Width=".5fr" Sortable="true" />
+       @*  <TemplateColumn Title="Actions" Align="@Align.End">
+            <FluentButton aria-label="View" IconEnd="@(new Icons.Regular.Size16.Eye())" OnClick="@(() => OnSelectItem(context))" />
+        </TemplateColumn> *@
+    </ChildContent>
+    <EmptyContent>
+        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+            <div> No Data Found</div>
+        </FluentStack>
+    </EmptyContent>
+</FluentDataGrid>
+<FluentPaginator State="@pagination" />
+
+

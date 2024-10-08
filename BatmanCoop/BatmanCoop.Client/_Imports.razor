@@ -1,5 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using BatmanCoopShared.Interfaces.LendInterface
 @using BatmanCoopShared.Interfaces.ManpowerInterface
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
@@ -12,9 +13,11 @@
 
 
 @using BatmanCoopShared.Model.ManpowerModel
+@using BatmanCoopShared.Model.MasterDataModel
 
 
 @inject NavigationManager _navigation
+@inject IJSRuntime _jsrunTime
 
 
 @*Fluent Service*@
@@ -24,3 +27,5 @@
 
 @* Interface and Service *@
 @inject IMemberInt _memberService
+@inject IBuyerInt _buyerService
+

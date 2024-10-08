@@ -4,6 +4,7 @@ using BatmanCoop.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BatmanCoop.Migrations
 {
     [DbContext(typeof(DataBaseConfiguration))]
-    partial class DataBaseConfigurationModelSnapshot : ModelSnapshot
+    [Migration("20240925054648_MG092520240146")]
+    partial class MG092520240146
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,36 +24,6 @@ namespace BatmanCoop.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BatmanCoopShared.Model.LendModel.BuyerModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MemMId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Points_Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Share_Capital")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Share_Points")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemMId");
-
-                    b.ToTable("BuyerTable");
-                });
 
             modelBuilder.Entity("BatmanCoopShared.Model.ManpowerModel.MemberAttachM", b =>
                 {
@@ -101,10 +74,6 @@ namespace BatmanCoop.Migrations
 
                     b.Property<int?>("Age")
                         .HasColumnType("int");
-
-                    b.Property<string>("Bank_Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
@@ -170,17 +139,6 @@ namespace BatmanCoop.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CivilStatusTable");
-                });
-
-            modelBuilder.Entity("BatmanCoopShared.Model.LendModel.BuyerModel", b =>
-                {
-                    b.HasOne("BatmanCoopShared.Model.ManpowerModel.MemberM", "MemM")
-                        .WithMany()
-                        .HasForeignKey("MemMId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MemM");
                 });
 #pragma warning restore 612, 618
         }

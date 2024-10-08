@@ -1,9 +1,7 @@
 ﻿using BatmanCoop.Client.Pages.ManpowerPage.DialogPage;
-using BatmanCoop.Client.Services.ManpowerService;
 using BatmanCoopShared.Model.ManpowerModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
-using System.Diagnostics.Metrics;
 
 namespace BatmanCoop.Client.Pages.ManpowerPage
 {
@@ -15,8 +13,8 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
         private bool _trapFocus = true;
         private bool _modal = true;
 
-       
 
+        DataGridSelectMode Mode = DataGridSelectMode.Single;
         PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
         protected override async Task OnInitializedAsync()
         {
@@ -39,7 +37,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
 
             if (result.Cancelled)
             {
-               return;
+                return;
             }
 
             if (result.Data is not null)
@@ -47,7 +45,6 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
                 Member_List = await _memberService.GetMasterList();
                 IList_Mem = Member_List.AsQueryable();
                 _toastService.ShowSuccess("Added Successfully");
-               // Member_List = await _memberService.GetMasterList();
             }
         }
 
@@ -57,5 +54,28 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
             _navigation.NavigateTo("/member-info");
         }
 
+        private async Task OnSelectItem(MemberM _obj)
+        {
+            var _dialog = await _dialogService.ShowDialogAsync<MemberAddPage>(_obj, new DialogParameters()
+            {
+                Modal = true,
+                Width = "1000px",
+                Height = "auto",
+                PreventDismissOnOverlayClick = true,
+                TrapFocus = false,
+                PrimaryActionEnabled = false,
+                PrimaryAction = "",
+                SecondaryAction = "",
+                SecondaryActionEnabled = false
+
+            });
+
+            //DialogResult? result = await _dialog.Result;
+
+            //if (result.Cancelled)
+            //{
+            //    return;
+            //}
+        }
     }
 }

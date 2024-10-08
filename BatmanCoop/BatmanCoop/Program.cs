@@ -1,6 +1,8 @@
+using BatmanCoop.Client.Services.LendService;
 using BatmanCoop.Components;
 using BatmanCoop.DatabaseContext;
 using BatmanCoop.Repository.ManpowerRepository;
+using BatmanCoopShared.Interfaces.LendInterface;
 using BatmanCoopShared.Interfaces.ManpowerInterface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
@@ -38,6 +40,8 @@ builder.Services.AddScoped<IToastService, ToastService>();
 
 //Manpower
 builder.Services.AddScoped<IMemberInt, MemberRepo>();
+
+builder.Services.AddScoped<IBuyerInt, BuyerService>();
 
 var app = builder.Build();
 

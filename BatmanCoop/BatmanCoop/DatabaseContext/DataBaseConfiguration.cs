@@ -1,4 +1,5 @@
-﻿using BatmanCoopShared.Model.ManpowerModel;
+﻿using BatmanCoopShared.Model.LendModel;
+using BatmanCoopShared.Model.ManpowerModel;
 using BatmanCoopShared.Model.MasterDataModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,10 @@ namespace BatmanCoop.DatabaseContext
 
         //Manpower
         public DbSet<MemberM> MemberTable { get; set; }
+        public DbSet<MemberAttachM> MemAttachTable { get; set; }
+
+        //Lend Main
+        public DbSet<BuyerModel> BuyerTable { get; set; }
 
     }
 }

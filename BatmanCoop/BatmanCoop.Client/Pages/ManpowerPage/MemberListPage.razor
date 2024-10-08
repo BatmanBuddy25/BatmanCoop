@@ -16,17 +16,20 @@
 <FluentDataGrid Items="@IList_Mem"
                 Pagination="@pagination"
                 ShowHover="true"
-                GenerateHeader="GenerateHeaderOption.Sticky"
+                GenerateHeader="GenerateHeaderOption.Sticky"                
+                Style="height: 100%;overflow:auto;" >
                 
-                Style="height: 100%;overflow:auto;">
     <ChildContent>
         <PropertyColumn Property="@(a => a.MemberNo)" Title="Member No." Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.LastName)" Title="Last Name" Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.FirstName)" Title="First Name" Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.Contact)" Title="Contact No." Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.ReferralName)" Title="Referal Name" Width=".5fr" Sortable="true" />
-        <PropertyColumn Property="@(a => a.RegisterDate)" Title="Register Date" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.RegisterDate.ToShortDateString())" Title="Register Date" Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.MemStatus)" Title="Status" Width=".5fr" Sortable="true" />
+        <TemplateColumn Title="Actions" Align="@Align.End">
+            <FluentButton aria-label="View" IconEnd="@(new Icons.Regular.Size16.Eye())" OnClick="@(() => OnSelectItem(context))" />
+        </TemplateColumn>
     </ChildContent>
     <EmptyContent>
         <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
