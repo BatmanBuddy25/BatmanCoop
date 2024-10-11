@@ -8,6 +8,13 @@ namespace BatmanCoop.Client.Services.ManpowerService
     {
         private readonly HttpClient _httpClient = httpClient;
 
+        public async Task<int> Getheadcount()
+        {
+            var _response = await _httpClient.GetAsync("api/AttachmentMem/Getheadcount");
+            var _headcount = await _response.Content.ReadFromJsonAsync<int>();
+            return _headcount!;
+        }
+
         public async Task<string> InsertAttachment(MemberAttachM _obj)
         {
             var _response = await _httpClient.PostAsJsonAsync("api/AttachmentMem/Postattachment", _obj);

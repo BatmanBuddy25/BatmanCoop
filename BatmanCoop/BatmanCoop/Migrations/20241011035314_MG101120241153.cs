@@ -5,14 +5,14 @@
 namespace BatmanCoop.Migrations
 {
     /// <inheritdoc />
-    public partial class MG092520240207 : Migration
+    public partial class MG101120241153 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Bank_Number",
-                table: "MemberTable",
+                name: "Img_Code",
+                table: "MemAttachTable",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
@@ -22,8 +22,8 @@ namespace BatmanCoop.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Bank_Number",
-                table: "MemberTable");
+                name: "Img_Code",
+                table: "MemAttachTable");
         }
     }
 }

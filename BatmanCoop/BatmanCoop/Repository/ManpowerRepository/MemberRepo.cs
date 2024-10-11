@@ -18,6 +18,13 @@ namespace BatmanCoop.Repository.ManpowerRepository
             return await _context.MemberTable.Where(a => a.ReferralId != _refCode).ToListAsync();
         }
 
+        public async Task<MemberM> Getspecmember(int memberId)
+        {
+            var _obj = await _context.MemberTable.Where(a => a.Id == memberId).FirstOrDefaultAsync();
+            return _obj!;
+        }
+        
+
         public async Task InsertMember(MemberM _obj)
         {
             _context.MemberTable.Add(_obj);

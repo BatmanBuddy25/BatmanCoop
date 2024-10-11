@@ -1,21 +1,24 @@
-﻿using BatmanCoopShared.Interfaces.ManpowerInterface;
+﻿using BatmanCoop.DatabaseContext;
+using BatmanCoopShared.Interfaces.ManpowerInterface;
 using BatmanCoopShared.Model.ManpowerModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BatmanCoop.Controllers.ManpowerController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AttachmentMemController(IWebHostEnvironment webhost, IAttachmentInt attachInt) : ControllerBase
+    public class AttachmentMemController(IWebHostEnvironment webhost, IAttachmentInt attachInt, DataBaseConfiguration context) : ControllerBase
     {
+        private readonly DataBaseConfiguration _context = context;
         private readonly IWebHostEnvironment _webhost = webhost ?? throw new ArgumentNullException(nameof(webhost));
         private readonly IAttachmentInt _attachInt = attachInt;
 
-
-        //private async Task<List<AttachmentMem>> ReturnObj()
-        //{
-        //    return await _context.MemAttachTable.ToListAsync();
-        //}
+        [HttpGet("Getheadcount")]
+        public async Task<ActionResult<int>> Getheadcount()
+        {
+            return await _context.MemberTable.CountAsync();
+        }
 
         [HttpPost("Postattachment")]
         public async Task<ActionResult<string>> CreateEmpImage(MemberAttachM _obj)
@@ -31,6 +34,7 @@ namespace BatmanCoop.Controllers.ManpowerController
 
             MemberAttachM _attachObj = new()
             {
+                Img_Code = _obj.Img_Code,
                 Img_Filename = _obj.Img_Filename,
                 Img_Contenttype = _obj.Img_Contenttype,
                 Img_URL = filePath,

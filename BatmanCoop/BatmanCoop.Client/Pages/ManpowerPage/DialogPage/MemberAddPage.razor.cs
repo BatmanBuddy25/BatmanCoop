@@ -1,9 +1,14 @@
-﻿using BatmanCoopShared.Model.ManpowerModel;
+﻿using BatmanCoopShared.Helper;
+using BatmanCoopShared.Model.ManpowerModel;
 using BatmanCoopShared.Model.MasterDataModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
+
 
 namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
 {
@@ -11,15 +16,22 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
     {
         // [Parameter]
         public MemberM Obj { get; set; } = new();
+        public MemberM ObjUser { get; set; } = new();
 
         public CivilStatus SelectCivil { get; set; } = new();
         public MemberM SelectReferal { get; set; } = new();
         private List<MemberM> ReferalList { get; set; } = [];
+        private List<MemberAttachM> AttachList { get; set; } = [];
 
         [CascadingParameter] public FluentDialog? Dialog { get; set; }
         FluentInputFile? attachments = default!;
         FluentTab? changedto;
+        private FluentWizard MyWizard = default!;
+
+
         //int? progressPercent;
+        private int WizardIndex = 0;
+        string AttachCode = string.Empty;
         string? progressTitle;
         string? activeid = "tab-1";
         List<string> Files = new();
@@ -27,29 +39,34 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         bool isTakeimg = false;
         bool isUploadimg = false;
         bool isCloseimg = false;
-
+        bool isImgShow = true;
+        bool isCaptureShow = true;
         bool isPhaseone = true;
         bool isPhasetwo = true;
+        bool isBtnSave = false;
+        bool isBtnCancel = false;
+        bool isBtnNext = false;
+        bool isBtnBack = false;
 
-        private string ImgBase64 = string.Empty;
+        private string ImgBase64 = "";
 
         protected override async Task OnInitializedAsync()
         {
+            ObjUser = TokenHelpers.GetModel();
             await Task.Delay(1);
             ImgBase64 = "img/emptyimg.png";
-            //isUploadimg = false;
-            //isTakeimg = false;
-            //isCloseimg = true;
             isPhaseone = false;
             isPhasetwo = true;
-
-            ReferalList = await _memberService.GetMasterList();
-
-
+            isImgShow = false;
+            isCaptureShow = true;
+            isBtnBack = true;
+            isBtnSave = true;
+            ReferalList = await _memberService.GetMasterList();            
         }
 
         private async Task OnSaveData()
         {
+            
             if (SelectReferal != null)
             {
                 Obj.ReferralId = SelectReferal.MemberNo;
@@ -57,19 +74,44 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             }
             else
             {
-                Obj.ReferralId = "SelectReferal.MemberNo";
-                Obj.ReferralName = "Hello Coop";
+                Obj.ReferralId = ObjUser.MemberNo;
+                Obj.ReferralName = $"{ObjUser.LastName}, {ObjUser.FirstName} {ObjUser.MiddleName}";
             }
-
-            await OnGetmemberno();
+                        
             Obj.MemStatus = "Application";
+
+            //TokenHelpers.ConvertStringsToUpperCase(Obj);
             await _memberService.InsertMember(Obj);
+
+            foreach (var _item in AttachList)
+            {
+                await _attachService.InsertAttachment(_item);
+            }
             await Dialog!.CloseAsync(Obj);
         }
 
         private async Task OnCloseDialog()
         {
             await Dialog!.CancelAsync();
+        }
+        private async Task OnNextTab()
+        {
+            await OnGetmemberno();
+            isBtnBack = false;
+            isBtnSave = false;
+            isBtnNext = true;
+            isBtnCancel = true;
+
+            
+            await MyWizard.GoToStepAsync(WizardIndex + 1);
+        }
+        private void OnBackTab()
+        {
+            isBtnBack = true;
+            isBtnSave = true;
+            isBtnNext = false;
+            isBtnCancel = false;
+            MyWizard.GoToStepAsync(WizardIndex - 1);
         }
 
         private void OnCalculateAge()
@@ -91,11 +133,21 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             var _memNo = _headcount.ToString().PadLeft(6, '0');
             Obj.MemberNo = $"MN{_memNo}";
         }
-
+        private async Task OnGetattachcode()
+        {
+            await Task.Delay(1);
+            string _returnString = string.Empty;
+            int _headcount = await _attachService.Getheadcount() + 1;
+            var _memNo = _headcount.ToString().PadLeft(4, '0');
+            AttachCode = $"AC{_memNo}";
+        }
         private async Task OnFileUploadedAsync(InputFileChangeEventArgs _file)
         {
             isPhaseone = false;
             isPhasetwo = true;
+            ImgBase64 = "img/emptyimg.png";
+            AttachList.Clear();
+            await OnGetattachcode();
 
             long _imgsize = long.MaxValue;
             var _browsFile = _file.File;
@@ -112,26 +164,57 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
                 _imgBuffer = _memoryStream.ToArray();
             }
 
-            //_imgUrl = $"data:{_imgContent};base64,{Convert.ToBase64String(_imgBuffer)}";
-            ImgBase64 = $"data:image/{_imgContent};base64,{Convert.ToBase64String(_imgBuffer)}";
+            _imgUrl = $"data:image/{_imgContent};base64,{Convert.ToBase64String(_imgBuffer)}";
+            if(_file.File.Name is null)
+            {
+                ImgBase64 = "img/emptyimg.png";
+                return;
+            }
+            else
+            {
+                using var _contents = new MultipartFormDataContent();
+                var _fileContents = new ByteArrayContent(_imgBuffer);
+                _fileContents.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(_imgContent);
 
+                _attachImg.Add(content: _fileContents, name: "\"files\"", fileName: _imgFilename);
+
+                MemberAttachM _obj = new()
+                {
+                    Img_Code =  AttachCode,
+                    Img_Filename = _imgFilename,
+                    Img_URL = _imgUrl,
+                    Img_Contenttype = _imgContent,
+                    LastName = Obj.LastName,
+                    Img_Data = _imgBuffer,
+                    Img_Date = DateTime.Now,
+                    Member_No = Obj.MemberNo
+                };
+
+                AttachList.Add(_obj);
+                ImgBase64 = $"data:image/{_imgContent};base64,{Convert.ToBase64String(_imgBuffer)}";
+
+                _contents.Dispose();
+                _fileContents.Dispose();
+            }
         }
 
         private async Task OnTakeImg()
         {
-            isPhaseone = true; isPhasetwo = false;
+            isPhaseone = true; isPhasetwo = false; isImgShow = true; isCaptureShow = false;
+            ImgBase64 = "img/emptyimg.png";
             await _jsrunTime.InvokeVoidAsync("startVideo", "videoFeed");
         }
         private async Task OnCloseImg()
         {
-            isPhaseone = false; isPhasetwo = true;
-            await _jsrunTime.InvokeVoidAsync("startVideo", "videoFeed");
+            isPhaseone = false; isPhasetwo = true; isImgShow = false; isCaptureShow = true;
+            await _jsrunTime.InvokeVoidAsync("stopVideo", "videoFeed");
         }
         private async Task OnCaptureImg()
         {
-            isPhaseone = false; isPhasetwo = true;
-
-            await _jsrunTime.InvokeAsync<string>("getFrame", "videoFeed", "currentFrame", DotNetObjectReference.Create(this));
+            isPhaseone = false; isPhasetwo = true; 
+            AttachList.Clear();
+            await OnGetattachcode();
+            await _jsrunTime.InvokeAsync<String>("getFrame", "videoFeed", "currentFrame", DotNetObjectReference.Create(this));
             await OnCloseImg();
         }
 
@@ -143,27 +226,31 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         [JSInvokable]
         public void ProcessImage(string imageString)
         {
+            string _imgUrl;
+            string _contents = "jpeg";
             byte[] imageData = Convert.FromBase64String(imageString.Split(',')[1]);
-            ImgBase64 = $"data:image/png;base64,{Convert.ToBase64String(imageData)}";
-            //using (var image = Image.Load(imageData))
-            //{
-            //    image.Mutate(x => x
-            //        .Flip(FlipMode.Horizontal) //To match mirrored webcam image
-            //    );
-            //    ImgBase64 = image.ToBase64String(JpegFormat.Instance);
-            //}
-        }
-        private void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
-        {
-            //progressPercent = attachments!.ProgressPercent;
-            //progressTitle = attachments!.ProgressTitle;
+            using (var image = Image.Load(imageData))
+            {
+                image.Mutate(x => x.Flip(FlipMode.Horizontal)); //To match mirrored webcam image
+                _imgUrl = image.ToBase64String(JpegFormat.Instance);
+            }
 
-            //// For the demo, delete these files.
-            //foreach (var file in Files)
-            //{
-            //    File.Delete(file);
-            //}
+            MemberAttachM _obj = new()
+            {
+                Img_Code = AttachCode,
+                Img_Filename = $"{AttachCode}.jpeg",
+                Img_URL = string.Empty,
+                Img_Contenttype = _contents,
+                LastName = Obj.LastName,
+                Img_Data = imageData,
+                Img_Date = DateTime.Now,
+                Member_No = Obj.MemberNo
+            };
+
+            AttachList.Add(_obj);
+            ImgBase64 = _imgUrl;
         }
+
 
         private List<CivilStatus> CivilStatus_List = new()
         {
@@ -172,8 +259,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             { new CivilStatus { Id = 3, Description = "Separated" } },
             { new CivilStatus { Id = 4, Description = "Divorced" } },
             { new CivilStatus { Id = 5, Description = "Widowed" } },
-            { new CivilStatus { Id = 6, Description = "Six" } },
-            { new CivilStatus { Id = 7, Description = "Engaged" } }
+            { new CivilStatus { Id = 6, Description = "Engaged" } }
         };
     }
 }

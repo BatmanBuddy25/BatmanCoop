@@ -14,6 +14,7 @@ namespace BatmanCoopShared.Model.ManpowerModel
         [Required(ErrorMessage = "Please fill out this field.")]
         public string FirstName { get; set; } = string.Empty;
         public string MiddleName { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Please fill out this field.")]
         public DateTime? BirthDate { get; set; }
         public int? Age { get; set; }
         [Required(ErrorMessage = "Please fill out this field.")]
@@ -21,6 +22,8 @@ namespace BatmanCoopShared.Model.ManpowerModel
         public string CivilStatus { get; set; } = string.Empty;
         [Required(ErrorMessage = "Please fill out this field.")]
         public string Contact { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Please fill out this field.")]
+        public string EmailAdd { get; set; } = string.Empty;
         [Required(ErrorMessage = "Please fill out this field.")]
         public string Bank_Number { get; set; } = string.Empty;
         public string MemStatus { get; set; } = string.Empty;

@@ -33,6 +33,13 @@ namespace BatmanCoop.Controllers.ManpowerController
             return await _context.MemberTable.Where(a => a.ReferralId != referalcode).ToListAsync();            
         }
 
+        [HttpGet("Getspecmember")]
+        public async Task<ActionResult<MemberM>> Getspecmember([FromQuery] int memberId)
+        {
+            var _obj = await _context.MemberTable.FirstOrDefaultAsync(a => a.Id == memberId);
+            return _obj!;
+        }
+
         [HttpGet("Getheadcount")]
         public async Task<ActionResult<int>> Getheadcount()
         {

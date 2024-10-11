@@ -11,25 +11,13 @@
                 video.play();
             };
             //mirror image
-            video.style.webkitTransform = "scaleX(1)";
-            video.style.transform = "scaleX(1)";
+            video.style.webkitTransform = "scaleX(-1)";
+            video.style.transform = "scaleX(-1)";
         });
     }
 }
 
-function stopVideo(src) {
-    var video = document.getElementById(src);
-    video.pause();
-    video.currentTime = 0;
-    //if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    //    navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
-    //        //mirror image
-    //        video.style.webkitTransform = "scaleX(-1)";
-    //        video.style.transform = "scaleX(-1)";
-    //    });
-    //}
-   
-}
+
 
 function getFrame(src, dest, dotNetHelper) {
     let video = document.getElementById(src);
@@ -38,4 +26,18 @@ function getFrame(src, dest, dotNetHelper) {
 
     let dataUrl = canvas.toDataURL("image/jpeg");
     dotNetHelper.invokeMethodAsync('ProcessImage', dataUrl);
+}
+
+
+
+function stopVideo(src) {
+    let video = document.getElementById(src);
+    if (video && "srcObject" in video) {
+        const stream = video.srcObject;
+        if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+        video.srcObject = null;
+    }
 }

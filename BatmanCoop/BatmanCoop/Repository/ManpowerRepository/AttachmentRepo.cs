@@ -1,6 +1,7 @@
 ﻿using BatmanCoop.DatabaseContext;
 using BatmanCoopShared.Interfaces.ManpowerInterface;
 using BatmanCoopShared.Model.ManpowerModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace BatmanCoop.Repository.ManpowerRepository
 {
@@ -8,6 +9,16 @@ namespace BatmanCoop.Repository.ManpowerRepository
     {
         private readonly DataBaseConfiguration _context = context;
         private readonly IWebHostEnvironment _webhost = webhost ?? throw new ArgumentNullException(nameof(webhost));
+
+        public async Task<int> Getheadcount()
+        {
+            var _headCount = await _context.MemAttachTable.CountAsync();
+            if (_headCount == 0)
+                return 0;
+
+            return _headCount;
+        }
+
         public async Task<string> InsertAttachment(MemberAttachM _obj)
         {
             if (_obj is null) return "NoAttachment";
@@ -23,6 +34,7 @@ namespace BatmanCoop.Repository.ManpowerRepository
 
             MemberAttachM _attachObj = new()
             {
+                Img_Code = _obj.Img_Code,
                 Img_Filename = _obj.Img_Filename,
                 Img_Contenttype = _obj.Img_Contenttype,
                 Img_URL = _filepath,

@@ -1,0 +1,93 @@
+﻿
+@implements IDialogContentComponent<BuyerDetailsModel>
+
+<FluentDialogHeader ShowDismiss="true">
+    <div class="d-flex flex-column">
+        <FluentLabel Typo="Typography.PaneHeader">
+            Buyer Info
+        </FluentLabel>
+    </div>
+</FluentDialogHeader>
+
+
+<EditForm Model="@Content" FormName="editmember">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Member Name:</label>
+                <FluentLabel Class="form-control">@Content.MemM!.LastName, @Content.MemM!.FirstName </FluentLabel>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Bank Details:</label>
+                <FluentLabel Class="form-control">@Content.MemM!.Bank_Number </FluentLabel>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Amount:</label>
+                <FluentLabel Class="form-control">@Content.Share_Capital </FluentLabel>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Points:</label>
+                <FluentLabel Class="form-control">@Content.Share_Points </FluentLabel>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Date:</label>
+                <FluentLabel Class="form-control">@Content.Created_Date.ToShortDateString() </FluentLabel>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Status:</label>
+                <FluentLabel Class="form-control">@Content.Buy_Status </FluentLabel>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="form-label">Bank Reference:</label>
+                <FluentTextField @bind-Value="Content.Reference_Code" Class="form-control" />
+                <ValidationMessage For="@(() => Content.Reference_Code)" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<FluentDialogFooter>
+    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Save())" Appearance="Appearance.Accent" >
+            Save
+        </FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size16.LockClosed())" Appearance="Appearance.Accent" >
+            Cancel
+        </FluentButton>
+    </FluentStack>
+</FluentDialogFooter>
+
+

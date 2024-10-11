@@ -8,6 +8,7 @@ namespace BatmanCoopShared.Model.ManpowerModel
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
+        public string Img_Code { get; set; } = string.Empty;
         public string Img_Filename { get; set; } = string.Empty;
         public string Img_Contenttype { get; set; } = string.Empty;
         public string Img_URL { get; set; } = string.Empty;

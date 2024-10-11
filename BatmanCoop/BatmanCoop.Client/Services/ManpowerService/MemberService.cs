@@ -1,5 +1,6 @@
 ﻿using BatmanCoopShared.Interfaces.ManpowerInterface;
 using BatmanCoopShared.Model.ManpowerModel;
+using Microsoft.FluentUI.AspNetCore.Components;
 using System.Net.Http.Json;
 
 namespace BatmanCoop.Client.Services.ManpowerService
@@ -26,6 +27,13 @@ namespace BatmanCoop.Client.Services.ManpowerService
         {
             var _response = await _httpClient.GetAsync($"api/MemberCs/Getsortreferal?referalcode={refCode}");
             var _masterlist = await _response.Content.ReadFromJsonAsync<List<MemberM>>();
+            return _masterlist!;
+        }
+
+        public async Task<MemberM> Getspecmember(int memberId)
+        {
+            var _response = await _httpClient.GetAsync($"api/MemberCs/Getspecmember?referalcode={memberId}");
+            var _masterlist = await _response.Content.ReadFromJsonAsync<MemberM>();
             return _masterlist!;
         }
 

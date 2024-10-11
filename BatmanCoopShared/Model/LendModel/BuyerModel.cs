@@ -9,11 +9,10 @@ namespace BatmanCoopShared.Model.LendModel
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
-        public MemberM? MemM { get; set; }
-        public int MemMId { get; set; }
+        public string Buy_Code { get; set; } = string.Empty;
         public decimal Share_Capital { get; set; }
-        public int Share_Points { get; set; }
-        public decimal Points_Amount { get; set; }
         public DateTime Created_Date { get; set; } = DateTime.Now;
+        public DateTime? Valid_Date {  get; set; }
+        public string Share_Status { get; set; } = string.Empty;
     }
 }

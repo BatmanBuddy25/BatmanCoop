@@ -9,10 +9,18 @@
     <nav class="sitenav" aria-labelledby="main-menu">
         <FluentNavMenu Id="main-menu" Width="250" Collapsible="true" Title="Navigation menu" @bind-Expanded="expanded" CustomToggle="true">
             <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
-            <FluentNavLink Href="counter" Icon="@(new Icons.Regular.Size20.NumberSymbolSquare())" IconColor="Color.Accent">Counter</FluentNavLink>
-            <FluentNavLink Href="weather" Icon="@(new Icons.Regular.Size20.WeatherPartlyCloudyDay())" IconColor="Color.Accent">Weather</FluentNavLink>
-            <FluentNavLink Href="member-list" Icon="@(new Icons.Regular.Size20.PeopleCommunity())" IconColor="Color.Accent">Member List</FluentNavLink>
-            <FluentNavLink Href="buyer-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Buyer List</FluentNavLink>
+
+            <FluentNavGroup Id="Group1" Title="Admin" Icon="@(new Icons.Regular.Size24.LeafOne())">
+                <FluentNavLink Href="member-list" Icon="@(new Icons.Regular.Size20.PeopleCommunity())" IconColor="Color.Accent">Member List</FluentNavLink>
+                <FluentNavLink Href="buyer-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Share Capital List</FluentNavLink>
+                <FluentNavLink Href="buyermem-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Buyers</FluentNavLink>
+                <FluentNavLink Href="transactionlogs-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Transaction Logs</FluentNavLink>
+            </FluentNavGroup>
+
+            <FluentNavGroup Id="Group2" Title="Member" Icon="@(new Icons.Regular.Size24.LeafOne())">                
+                <FluentNavLink Href="buyerinfo-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Account</FluentNavLink>
+            </FluentNavGroup>
+
         </FluentNavMenu>
     </nav>
 </div>

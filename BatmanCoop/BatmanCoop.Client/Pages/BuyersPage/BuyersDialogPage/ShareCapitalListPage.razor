@@ -1,0 +1,71 @@
+﻿@implements IDialogContentComponent
+
+
+
+
+<FluentDialogHeader ShowDismiss="true">
+    <div class="d-flex flex-column">
+        <FluentLabel Typo="Typography.PaneHeader">
+           Buy Capital
+        </FluentLabel>
+    </div>
+</FluentDialogHeader>
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-9">
+        <div class="form-group">
+            <FluentDataGrid Items="@IList_Buyer"
+                            Pagination="@pagination"
+                            ShowHover="true"
+                            GenerateHeader="GenerateHeaderOption.Sticky"
+                            Style="height: 100%;overflow:auto;">
+
+                <ChildContent>
+                    <PropertyColumn Property="@(a => a.Buy_Code)" Title="Account No." Width=".5fr" Sortable="true" />
+                    <PropertyColumn Property="@(a => "₱ "+a.Share_Capital)" Title="Capital" Width=".5fr" Sortable="true" />
+                    <PropertyColumn Property="@(a => a.Created_Date.ToShortDateString())" Title="Date" Width=".5fr" Sortable="true" />
+                    <PropertyColumn Property="@(a => a.Share_Status)" Title="Status" Width=".5fr" Sortable="true" />
+                    <TemplateColumn Title="Actions" Align="@Align.End">
+                        <FluentButton aria-label="View" IconEnd="@(new Icons.Regular.Size16.Eye())" OnClick="@(() => OnSelectItem(context))" />
+                    </TemplateColumn>
+                </ChildContent>
+                <EmptyContent>
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                        <div> No Data Found</div>
+                    </FluentStack>
+                </EmptyContent>
+            </FluentDataGrid>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3" hidden="@isEntryShare">
+        <div class="form-group">
+            <FluentStack Orientation="Orientation.Vertical" VerticalAlignment="VerticalAlignment.Center">
+                <br />
+              
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Capital:</label>
+                            <FluentNumberField @bind-Value="ObjDetails.Share_Capital" Class="form-control" />
+                            @* <ValidationMessage For="@(() => ObjDetails.Share_Capital)" /> *@
+                        </div>
+                    </div>
+                </div>
+                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.Save())" Appearance="Appearance.Accent" OnClick="OnSaveData">
+                        Save
+                    </FluentButton>
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.LockClosed())" Appearance="Appearance.Accent" OnClick="OnCloseDialog">
+                        Cancel
+                    </FluentButton>
+                </FluentStack>
+            </FluentStack>
+        </div>
+    </div>
+</div>
+
+<FluentDialogFooter Visible="false">
+</FluentDialogFooter>
+
+

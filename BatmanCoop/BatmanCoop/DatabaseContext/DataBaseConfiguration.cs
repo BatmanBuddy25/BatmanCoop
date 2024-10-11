@@ -1,4 +1,5 @@
 ﻿using BatmanCoopShared.Model.LendModel;
+using BatmanCoopShared.Model.LogsModel;
 using BatmanCoopShared.Model.ManpowerModel;
 using BatmanCoopShared.Model.MasterDataModel;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,9 @@ namespace BatmanCoop.DatabaseContext
 
         //Lend Main
         public DbSet<BuyerModel> BuyerTable { get; set; }
+        public DbSet<BuyerDetailsModel> BuyerDetailsTable { get; set; }
 
+        //Logs Main
+        public DbSet<TransactionLogsModel> TransLogsTable { get; set; }
     }
 }

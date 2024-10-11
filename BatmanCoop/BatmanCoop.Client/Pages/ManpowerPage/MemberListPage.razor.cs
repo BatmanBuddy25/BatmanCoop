@@ -1,4 +1,5 @@
 ﻿using BatmanCoop.Client.Pages.ManpowerPage.DialogPage;
+using BatmanCoopShared.Helper;
 using BatmanCoopShared.Model.ManpowerModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
@@ -29,7 +30,6 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
             {
                 Modal = true,
                 Width = "1000px",
-                Height = "auto",
                 PreventDismissOnOverlayClick = true,
                 TrapFocus = false
             });
@@ -54,6 +54,15 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
             _navigation.NavigateTo("/member-info");
         }
 
+        private async Task OnGetmemberno()
+        {
+            await Task.Delay(1);
+            string _returnString = string.Empty;
+            int _headcount = await _memberService.Getheadcount() + 1;
+            var _memNo = _headcount.ToString().PadLeft(6, '0');
+            var _code = $"MN{_memNo}";
+            TokenHelpers.Set_MemberCode(_code);
+        }
         private async Task OnSelectItem(MemberM _obj)
         {
             var _dialog = await _dialogService.ShowDialogAsync<MemberAddPage>(_obj, new DialogParameters()

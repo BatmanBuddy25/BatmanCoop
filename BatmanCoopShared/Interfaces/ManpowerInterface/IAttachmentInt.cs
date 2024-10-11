@@ -5,5 +5,6 @@ namespace BatmanCoopShared.Interfaces.ManpowerInterface
     public interface IAttachmentInt
     {
         Task<string> InsertAttachment(MemberAttachM _obj);
+        Task<int> Getheadcount();
     }
 }

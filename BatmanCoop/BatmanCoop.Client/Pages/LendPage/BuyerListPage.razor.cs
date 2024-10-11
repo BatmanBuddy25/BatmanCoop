@@ -18,6 +18,13 @@ namespace BatmanCoop.Client.Pages.LendPage
         PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
         DataGridSelectMode Mode = DataGridSelectMode.Single;
 
+        protected override async Task OnInitializedAsync()
+        {
+            await Task.Delay(1);
+            Buyer_List = await _buyerService.GetMasterList();
+            IList_Buyer = Buyer_List.AsQueryable();
+        }
+
         private async Task OnAddBuyer()
         {
             var _dialog = await _dialogService.ShowDialogAsync<BuyerAddPage>(null!, new DialogParameters()
@@ -38,7 +45,7 @@ namespace BatmanCoop.Client.Pages.LendPage
             if (result.Data is not null)
             {
                 Buyer_List = await _buyerService.GetMasterList();
-                //IList_Mem = Member_List.AsQueryable();
+                IList_Buyer = Buyer_List.AsQueryable();
                 _toastService.ShowSuccess("Added Successfully");
             }
         }
