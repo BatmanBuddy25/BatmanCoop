@@ -9,6 +9,8 @@ namespace BatmanCoopShared.Interfaces.ManpowerInterface
         Task<List<MemberM>> GetMasterList();
         Task<List<MemberM>> GetSortreferal(string refCode);
         Task<MemberM> Getspecmember(int memberId);
+        Task<MemberM> GetReferalObj(string _referalId);
         Task<int> Getheadcount();
+        Task<int> Getexistreferal(string _referalId);
     }
 }

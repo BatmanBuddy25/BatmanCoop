@@ -27,6 +27,8 @@
         <PropertyColumn Property="@(a => a.Share_Points)" Title="Points" Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.Created_Date.ToShortDateString())" Title="Date" Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.Buy_Status)" Title="Status" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.Approve_Status)" Title="Approve" Width=".5fr" Sortable="true" />
+        <PropertyColumn Property="@(a => a.Reference_Code)" Title="Reference" Width=".5fr" Sortable="true" />
         <TemplateColumn Title="Actions" Align="@Align.End">
             <FluentButton aria-label="View" IconEnd="@(new Icons.Regular.Size16.Eye())" OnClick="@(() => OnSelectItem(context))" />
         </TemplateColumn>

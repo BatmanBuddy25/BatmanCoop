@@ -1,6 +1,4 @@
-﻿
-
-@implements IDialogContentComponent
+﻿@implements IDialogContentComponent
 
 
 <style>
@@ -18,7 +16,25 @@
 </FluentDialogHeader>
 
 <FluentDialogBody>
-    <FluentWizard Style="height: auto !important; " @bind-Value="@WizardIndex" @ref="@MyWizard" StepperPosition="StepperPosition.Top" StepSequence="WizardStepSequence.Linear" DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)">
+
+    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" hidden="@isEntReferal">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-label">Referal Code:</label>
+                    <FluentTextField @bind-Value="Obj.ReferralId" Style="width: 100%;" Class="form-control" />                    
+                </div>
+            </div>
+        </div>
+        <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.End" Style="margin-top:20px;">
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Search())" Appearance="Appearance.Accent"  OnClick="OnInquireref">
+                Search
+            </FluentButton>          
+        </FluentStack>
+    </FluentStack>
+
+
+    <FluentWizard Style="height: auto !important; " @bind-Value="@WizardIndex" @ref="@MyWizard" StepperPosition="StepperPosition.Top" StepSequence="WizardStepSequence.Linear" DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)" hidden="@isViewFields">
         <Steps>
             <FluentWizardStep Label="Step 1">
                 <div style="padding-left: 8px;">
@@ -97,6 +113,46 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
+                                    <label class="form-label">Payment Type:</label>
+                                    <InputSelect @bind-Value="@Obj.PayTypeMId"  Class="form-control" >
+                                        @if (PaymentType_List != null)
+                                        {
+                                            <option value="">Select payment type</option>
+                                            @foreach (var _item in PaymentType_List)
+                                            {
+                                                <option value="@_item.Id">@_item.Description</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    
+
+                                    @if(Obj.PayTypeMId == 1)
+                                    {
+                                        <label class="form-label">Receipt No:</label>
+                                        <FluentTextField @bind-Value="Obj.Bank_Number" Class="form-control"  />
+                                        <ValidationMessage For="@(() => Obj.Bank_Number)" />
+                                    }
+                                    else if(Obj.PayTypeMId == 2)
+                                    {
+                                        <label class="form-label">Gcash / Maya:</label>
+                                        <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Bottom">
+                                            <label class="form-label">+63</label>
+                                            <FluentTextField @bind-Value="Obj.Bank_Number" Class="form-control" Maxlength="10" />
+                                        </FluentStack>
+                                        <ValidationMessage For="@(() => Obj.Bank_Number)" />
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
                                     <label class="form-label">Contact No:</label>
                                     <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Bottom">
                                         <label class="form-label">+63</label>
@@ -107,34 +163,25 @@
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Bank Number:</label>
-                                    <FluentTextField @bind-Value="Obj.Bank_Number" Class="form-control" />
-                                    <ValidationMessage For="@(() => Obj.Bank_Number)" />
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                                <div class="form-group">
                                     <label class="form-label">Email Address:</label>
                                     <FluentTextField @bind-Value="Obj.EmailAdd" Class="form-control" />
                                     <ValidationMessage For="@(() => Obj.EmailAdd)" />
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
+                            </div>                           
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">Referal Name:</label>
-                                    <FluentSelect TOption="MemberM"
-                                                  Items="@ReferalList"
-                                                  Width="100%"
-                                                  Placeholder="Select referal"
-                                                  OptionValue="@(p => p.MemberNo)"
-                                                  OptionText="@(p => p.LastName + " , " + p.FirstName )"
-                                                  @bind-Value="@Obj.MemberNo"
-                                                  @bind-SelectedOption="@SelectReferal"
-                                                  Class="form-control" />
-                                    <ValidationMessage For="@(() => Obj.ReferralName)" />
+                                    <label class="form-label">Referal Name:</label> 
+                                    @if(Obj.ReferralId == "MN000000")
+                                    {
+                                        <FluentLabel Class="form-control">@ObjReferal?.ReferralName</FluentLabel>
+                                    }
+                                    else
+                                    {
+                                        <FluentLabel Class="form-control">@ObjReferal?.LastName, @ObjReferal?.FirstName</FluentLabel>
+                                    }                                    
                                 </div>
                             </div>
                         </div>
@@ -155,7 +202,7 @@
                 @*  <LoadingContent>
                 <FluentProgressRing />
                 </LoadingContent> *@
-                <div >
+                <div>
                     <FluentStack Orientation="Orientation.Vertical" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Center">
                         <FluentStack Orientation="Orientation.Vertical" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Center" style="border-color:#ced0d2;">
                             <div style="border: 2px solid #dee2e6;border-radius: 16px;display: flex;justify-content: center;margin-top: 12px;background-color: #fbfbfb;">
@@ -217,16 +264,16 @@
 
 @* <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
     <FluentTab Label="Step 1"  Id="tab-1">
-        
+
     </FluentTab>
 
     <FluentTab Label="Step 2" Id="tab-2" >
-        
+
     </FluentTab>
 </FluentTabs> *@
 
 <FluentDialogFooter Visible="false">
-   
+
 </FluentDialogFooter>
 
 

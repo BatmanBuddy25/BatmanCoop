@@ -38,7 +38,7 @@ namespace BatmanCoop.Controllers.LendController
         {
             _context.BuyerTable.Add(_obj);
             await _context.SaveChangesAsync();
-            return Ok(await ReturnObj());
+            return Ok();
         }
 
         [HttpPut("Buysharecap")]
@@ -53,7 +53,7 @@ namespace BatmanCoop.Controllers.LendController
             _dbObj.Share_Status = _obj.Share_Status;
 
             await _context.SaveChangesAsync();
-            return Ok(await ReturnObj());
+            return Ok();
         }
     }
 }

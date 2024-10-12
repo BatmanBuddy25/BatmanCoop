@@ -40,19 +40,31 @@ namespace BatmanCoop.Controllers.ManpowerController
             return _obj!;
         }
 
+        [HttpGet("Getreferalmember")]
+        public async Task<ActionResult<MemberM>> Getreferalmember([FromQuery] string referalid)
+        {
+            var _obj = await _context.MemberTable.FirstOrDefaultAsync(a => a.ReferralId == referalid);
+            return _obj!;
+        }
+
         [HttpGet("Getheadcount")]
         public async Task<ActionResult<int>> Getheadcount()
         {
             return await _context.MemberTable.CountAsync();
         }
 
+        [HttpGet("Getexistreferal")]
+        public async Task<ActionResult<int>> Getheadcount([FromQuery] string referalid)
+        {
+            return await _context.MemberTable.Where(a => a.ReferralId == referalid).CountAsync();
+        }
 
         [HttpPost("Postobj")]
         public async Task<ActionResult<MemberM>> PostMemberModel(MemberM _obj)
         {
             _context.MemberTable.Add(_obj);
             await _context.SaveChangesAsync();
-            return Ok(await ReturnObj());
+            return Ok();
         }
 
         [HttpPut("Putobj")]

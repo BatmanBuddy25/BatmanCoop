@@ -4,6 +4,7 @@ using BatmanCoop.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BatmanCoop.Migrations
 {
     [DbContext(typeof(DataBaseConfiguration))]
-    partial class DataBaseConfigurationModelSnapshot : ModelSnapshot
+    [Migration("20241012090044_MG101220240500")]
+    partial class MG101220240500
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,7 +295,7 @@ namespace BatmanCoop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentTypeTable");
+                    b.ToTable("PaymentTypeM");
                 });
 
             modelBuilder.Entity("BatmanCoopShared.Model.LendModel.BuyerDetailsModel", b =>

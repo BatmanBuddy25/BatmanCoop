@@ -11,131 +11,212 @@
 </FluentDialogHeader>
 
 <FluentDialogBody>
+    <FluentWizard Style="height: auto !important; " @bind-Value="@WizardIndex" @ref="@MyWizard" StepperPosition="StepperPosition.Top" StepSequence="WizardStepSequence.Linear" DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)">
+        <Steps>
+            <FluentWizardStep Label="Step 1">
+                <div style="padding-left: 8px;">
+                    <EditForm Model="@Content" OnValidSubmit="OnNextTab">
+                        <DataAnnotationsValidator />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Last Name:</label>
+                                    <FluentTextField @bind-Value="Content.LastName" Class="form-control" />
+                                    <ValidationMessage For="@(() => Content.LastName)" />
+                                </div>
+                            </div>
 
-    <EditForm Model="@Content" FormName="editmember">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="form-label">Member No:</label>
-                    <FluentTextField @bind-Value="Content.MemberNo" Class="form-control" />
-                    <ValidationMessage For="@(() => Content.MemberNo)" />
-                </div>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-sm-12 col-md-4">
-                <div class="form-group">
-                    <label class="form-label">Last Name:</label>
-                    <FluentTextField @bind-Value="Content.LastName" Class="form-control" />
-                    <ValidationMessage For="@(() => Content.LastName)" />
-                </div>
-            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">First Name:</label>
+                                    <FluentTextField @bind-Value="Content.FirstName" Class="form-control" />
+                                    <ValidationMessage For="@(() => Content.FirstName)" />
+                                </div>
+                            </div>
 
-            <div class="col-sm-12 col-md-4">
-                <div class="form-group">
-                    <label class="form-label">First Name:</label>
-                    <FluentTextField @bind-Value="Content.FirstName" Class="form-control" />
-                    <ValidationMessage For="@(() => Content.FirstName)" />
-                </div>
-            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Middle Name:</label>
+                                    <FluentTextField @bind-Value="Content.MiddleName" Class="form-control" />
+                                    <ValidationMessage For="@(() => Content.MiddleName)" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Full Address:</label>
+                                    <FluentTextField @bind-Value="Content.FullAddress" Class="form-control" />
+                                    <ValidationMessage For="@(() => Content.FullAddress)" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Birth Date:</label>
+                                    <FluentDatePicker @bind-Value="@Content.BirthDate" @bind-Value:after="OnCalculateAge" class="form-control" />
+                                    <ValidationMessage For="@(() => Content.LastName)" />
+                                </div>
+                            </div>
 
-            <div class="col-sm-12 col-md-4">
-                <div class="form-group">
-                    <label class="form-label">Middle Name:</label>
-                    <FluentTextField @bind-Value="Content.MiddleName" Class="form-control" />
-                    <ValidationMessage For="@(() => Content.MiddleName)" />
-                </div>
-            </div>
-        </div>
-        <br />       
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="form-label">Full Address:</label>
-                    <FluentTextField @bind-Value="Content.FullAddress" Class="form-control" />
-                    <ValidationMessage For="@(() => Content.FullAddress)" />
-                </div>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-sm-12 col-md-4">
-                <div class="form-group">
-                    <label class="form-label">Birth Date:</label>
-                    <FluentDatePicker @bind-Value="@Content.BirthDate" class="form-control" ReadOnly="true" />
-                    <ValidationMessage For="@(() => Content.LastName)" />
-                </div>
-            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Age:</label>
+                                    <FluentNumberField @bind-Value="Content.Age" Class="form-control" ReadOnly="true" />
+                                    <ValidationMessage For="@(() => Content.Age)" />
+                                </div>
+                            </div>
 
-            <div class="col-sm-12 col-md-4">
-                <div class="form-group">
-                    <label class="form-label">Age:</label>
-                    <FluentNumberField @bind-Value="Content.Age" Class="form-control" ReadOnly="true" />
-                    <ValidationMessage For="@(() => Content.Age)" />
-                </div>
-            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Civil Status:</label>
+                                    <FluentSelect TOption="CivilStatus"
+                                                  Items="@CivilStatus_List"
+                                                  Placeholder="Select civil status"
+                                                  OptionValue="@(p => p.Id.ToString())"
+                                                  OptionText="@(p => p.Description)"
+                                                  @bind-Value="@Content.CivilStatus"
+                                                  @bind-SelectedOption="@SelectCivil"
+                                                  Width="100%"
+                                                  Class="form-control" />
+                                    <ValidationMessage For="@(() => Content.CivilStatus)" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Contact No:</label>
+                                    <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Bottom">
+                                        <label class="form-label">+63</label>
+                                        <FluentTextField @bind-Value="Content.Contact" Class="form-control" Maxlength="10" />
+                                    </FluentStack>
+                                    <ValidationMessage For="@(() => Content.Contact)" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Bank Number:</label>
+                                    <FluentTextField @bind-Value="Content.Bank_Number" Class="form-control" />
+                                    <ValidationMessage For="@(() => Content.Bank_Number)" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Email Address:</label>
+                                    <FluentTextField @bind-Value="Content.EmailAdd" Class="form-control" />
+                                    <ValidationMessage For="@(() => Content.EmailAdd)" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Referal Name:</label>
+                                    <InputSelect @bind-Value="@Content.ReferralId" Class="form-control">
+                                        @if (ReferalList != null)
+                                        {
+                                            @foreach (var _item in ReferalList)
+                                            {
+                                                <option value="@_item.ReferralId">@_item.ReferralName</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="col-sm-12 col-md-4">
-                <div class="form-group">
-                    <label class="form-label">Civil Status:</label>
-                    <FluentSelect TOption="CivilStatus"
-                                  Items="@CivilStatus_List"
-                                  Placeholder="Select civil status"
-                                  OptionValue="@(p => p.Id.ToString())"
-                                  OptionText="@(p => p.Description)"
-                                  @bind-Value="@Content.CivilStatus"
-                                  @bind-SelectedOption="@SelectCivil"
-                                  Width="200px"
-                                  Class="form-control" />
-                    <ValidationMessage For="@(() => Content.CivilStatus)" />
+                        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End" Style="margin-top:20px;">
+                            <FluentButton IconStart="@(new Icons.Regular.Size16.Save())" Appearance="Appearance.Accent" hidden="@isBtnNext" Type="ButtonType.Submit">
+                                Next
+                            </FluentButton>
+                            <FluentButton IconStart="@(new Icons.Regular.Size16.LockClosed())" Appearance="Appearance.Accent" OnClick="OnCloseDialog" hidden="@isBtnCancel">
+                                Cancel
+                            </FluentButton>
+                        </FluentStack>
+                    </EditForm>
                 </div>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                    <label class="form-label">Contact No:</label>
-                    <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Bottom">
-                        <label class="form-label">+63</label>
-                        <FluentTextField @bind-Value="Content.Contact" Class="form-control" Maxlength="10" />
+            </FluentWizardStep>
+
+            <FluentWizardStep Label="Step 2">
+                @*  <LoadingContent>
+                <FluentProgressRing />
+                </LoadingContent> *@
+                <div>
+                    <FluentStack Orientation="Orientation.Vertical" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Center">
+                        <FluentStack Orientation="Orientation.Vertical" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Center" style="border-color:#ced0d2;">
+                            <div style="border: 2px solid #dee2e6;border-radius: 16px;display: flex;justify-content: center;margin-top: 12px;background-color: #fbfbfb;">
+                                <img src="@ImgBase64" alt="dp" style="width: 100%;object-fit: fill;" hidden="@isImgShow" />
+                                <video id="videoFeed" style="object-fit: fill;" width="320" height="260" hidden="@isCaptureShow" />
+                                <canvas class="d-none" style="object-fit: fill;" id="currentFrame" width="320" height="260" hidden="@isCaptureShow" />
+                            </div>
+                        </FluentStack>
+
+                        @*  OnCompleted="@OnCompleted" *@
+                        @* <FluentProgress Min="0" Max="100" Value="@progressPercent" Visible="@(progressPercent > 0)" /> *@
+                        @*  <FluentLabel Alignment="HorizontalAlignment.Center">
+                        @progressTitle
+                        </FluentLabel>  hidden="@isPhaseone"  hidden="@isPhasetwo"*@
+
+                        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" hidden="@isPhaseone">
+                            <FluentInputFile @ref="@attachments"
+                                             AnchorId="MyUploadStream"
+                                             DragDropZoneVisible="false"
+                                             Mode="InputFileMode.Stream"
+                                             Multiple="true"
+                                             MaximumFileSize="@(20 * 1024 * 1024)"
+                                             Accept=".png, .jpg, .jpeg"
+                                             OnInputFileChange="@OnFileUploadedAsync"
+                                             hidden="@isUploadimg" />
+                            <FluentButton Appearance="Appearance.Accent" Id="MyUploadStream" hidden="@isUploadimg">
+                                Upload files
+                            </FluentButton>
+                            <FluentButton IconStart="@(new Icons.Regular.Size16.Camera())" OnClick="OnTakeImg">
+                                Take Image
+                            </FluentButton>
+                        </FluentStack>
+
+                        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" hidden="@isPhasetwo">
+                            <FluentButton IconStart="@(new Icons.Regular.Size16.ClosedCaption())" OnClick="OnCloseImg">
+                                Close Image
+                            </FluentButton>
+                            <FluentButton IconStart="@(new Icons.Regular.Size16.Camera())" OnClick="OnCaptureImg">
+                                Capture Image
+                            </FluentButton>
+                        </FluentStack>
                     </FluentStack>
-                    <ValidationMessage For="@(() => Content.Contact)" />
+                    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End" Style="margin-top:20px;">
+                        <FluentButton IconStart="@(new Icons.Regular.Size16.Save())" Appearance="Appearance.Accent" OnClick="OnBackTab" hidden="@isBtnBack">
+                            Back
+                        </FluentButton>
+                        <FluentButton IconStart="@(new Icons.Regular.Size16.Save())" Appearance="Appearance.Accent" OnClick="OnSaveData" hidden="@isBtnSave">
+                            Save
+                        </FluentButton>
+                    </FluentStack>
                 </div>
-            </div>
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                    <label class="form-label">Bank Number:</label>
-                    <FluentTextField @bind-Value="Content.Bank_Number" Class="form-control" />
-                    <ValidationMessage For="@(() => Content.Bank_Number)" />
-                </div>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="form-label">Referal:</label>
-                    <FluentTextField @bind-Value="Referal_Mem" Class="form-control" />
-                </div>
-            </div>
-        </div>
-
-    </EditForm>
+            </FluentWizardStep>
+        </Steps>
+        <ButtonTemplate></ButtonTemplate>
+    </FluentWizard>
 </FluentDialogBody>
 
-<FluentDialogFooter>
-    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Save())" Appearance="Appearance.Accent" OnClick="OnUpdateObj">
-            Update
-        </FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.LockClosed())" Appearance="Appearance.Accent" OnClick="OnCloseDialog">
-            Cancel
-        </FluentButton>
-    </FluentStack>
+
+
+@* <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
+    <FluentTab Label="Step 1"  Id="tab-1">
+
+    </FluentTab>
+
+    <FluentTab Label="Step 2" Id="tab-2" >
+
+    </FluentTab>
+</FluentTabs> *@
+
+<FluentDialogFooter Visible="false">
+
 </FluentDialogFooter>
-
-

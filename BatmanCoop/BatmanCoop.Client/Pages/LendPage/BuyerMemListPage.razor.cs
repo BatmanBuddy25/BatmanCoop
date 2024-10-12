@@ -44,6 +44,19 @@ namespace BatmanCoop.Client.Pages.LendPage
                 SecondaryActionEnabled = false
 
             });
+            DialogResult? result = await _dialog.Result;
+
+            if (result.Cancelled)
+            {
+                return;
+            }
+
+            if (result.Data is not null)
+            {
+                BuyerMem_List = await _buyerDetailsService.GetMasterList();
+                IList_BuyerMem = BuyerMem_List.AsQueryable();
+                _toastService.ShowSuccess("Added Successfully");
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using BatmanCoopShared.Helper;
-using BatmanCoopShared.Model.ManpowerModel;
+﻿using BatmanCoopShared.Model.ManpowerModel;
 using BatmanCoopShared.Model.MasterDataModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -17,10 +16,9 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         // [Parameter]
         public MemberM Obj { get; set; } = new();
         public MemberM ObjUser { get; set; } = new();
+        public MemberM ObjReferal { get; set; } = new();
 
         public CivilStatus SelectCivil { get; set; } = new();
-        public MemberM SelectReferal { get; set; } = new();
-        private List<MemberM> ReferalList { get; set; } = [];
         private List<MemberAttachM> AttachList { get; set; } = [];
 
         [CascadingParameter] public FluentDialog? Dialog { get; set; }
@@ -47,12 +45,16 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         bool isBtnCancel = false;
         bool isBtnNext = false;
         bool isBtnBack = false;
+        bool isEntReferal = false;
+        bool isViewFields = true;
+        bool isPayType1 = true;
+        bool isPayType2 = true;
 
         private string ImgBase64 = "";
 
         protected override async Task OnInitializedAsync()
         {
-            ObjUser = TokenHelpers.GetModel();
+            ObjUser = _tokenHelpers.GetModel();
             await Task.Delay(1);
             ImgBase64 = "img/emptyimg.png";
             isPhaseone = false;
@@ -61,23 +63,24 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             isCaptureShow = true;
             isBtnBack = true;
             isBtnSave = true;
-            ReferalList = await _memberService.GetMasterList();            
+
+            Obj.ReferralId = "MN000001";
         }
 
         private async Task OnSaveData()
         {
-            
-            if (SelectReferal != null)
+            await OnGetmemberno();
+            if (ObjReferal != null)
             {
-                Obj.ReferralId = SelectReferal.MemberNo;
-                Obj.ReferralName = $"{SelectReferal.LastName}, {SelectReferal.FirstName} {SelectReferal.MiddleName}";
+                Obj.ReferralId = ObjReferal.MemberNo;
+                Obj.ReferralName = $"{ObjReferal.LastName}, {ObjReferal.FirstName} {ObjReferal.MiddleName}";
             }
             else
             {
                 Obj.ReferralId = ObjUser.MemberNo;
                 Obj.ReferralName = $"{ObjUser.LastName}, {ObjUser.FirstName} {ObjUser.MiddleName}";
             }
-                        
+
             Obj.MemStatus = "Application";
 
             //TokenHelpers.ConvertStringsToUpperCase(Obj);
@@ -85,6 +88,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
 
             foreach (var _item in AttachList)
             {
+                _item.Member_No = ObjUser.MemberNo;
                 await _attachService.InsertAttachment(_item);
             }
             await Dialog!.CloseAsync(Obj);
@@ -96,13 +100,12 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         }
         private async Task OnNextTab()
         {
-            await OnGetmemberno();
             isBtnBack = false;
             isBtnSave = false;
             isBtnNext = true;
             isBtnCancel = true;
 
-            
+
             await MyWizard.GoToStepAsync(WizardIndex + 1);
         }
         private void OnBackTab()
@@ -165,7 +168,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             }
 
             _imgUrl = $"data:image/{_imgContent};base64,{Convert.ToBase64String(_imgBuffer)}";
-            if(_file.File.Name is null)
+            if (_file.File.Name is null)
             {
                 ImgBase64 = "img/emptyimg.png";
                 return;
@@ -180,7 +183,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
 
                 MemberAttachM _obj = new()
                 {
-                    Img_Code =  AttachCode,
+                    Img_Code = AttachCode,
                     Img_Filename = _imgFilename,
                     Img_URL = _imgUrl,
                     Img_Contenttype = _imgContent,
@@ -211,7 +214,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         }
         private async Task OnCaptureImg()
         {
-            isPhaseone = false; isPhasetwo = true; 
+            isPhaseone = false; isPhasetwo = true;
             AttachList.Clear();
             await OnGetattachcode();
             await _jsrunTime.InvokeAsync<String>("getFrame", "videoFeed", "currentFrame", DotNetObjectReference.Create(this));
@@ -251,6 +254,48 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             ImgBase64 = _imgUrl;
         }
 
+        private async Task OnInquireref()
+        {
+            if(Obj.ReferralId == "MN000000")
+            {
+                ObjReferal.ReferralId = "MN000000";
+                ObjReferal.ReferralName = "Coop, Admin";
+                isEntReferal = true;
+                isViewFields = false;
+            }
+            else
+            {
+                ObjReferal = await _memberService.GetReferalObj(Obj.ReferralId!);
+                if (ObjReferal == null)
+                {
+                    _toastService.ShowError("No data found");
+                    return;
+                }
+
+                isEntReferal = true;
+                isViewFields = false;
+
+                ObjReferal = await _memberService.GetReferalObj(Obj.ReferralId!);
+            }
+        }
+
+        private async Task OnChangePayType()
+        {
+            await Task.Delay(1);
+            if(Obj.PayTypeMId == 1)
+            {
+
+            }
+            else if (Obj.PayTypeMId == 2)
+            {
+                isPayType1 = true;
+                isPayType2 = false;
+            }
+            else if (Obj.PayTypeMId == 3)
+            {
+
+            }
+        }
 
         private List<CivilStatus> CivilStatus_List = new()
         {
@@ -260,6 +305,13 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             { new CivilStatus { Id = 4, Description = "Divorced" } },
             { new CivilStatus { Id = 5, Description = "Widowed" } },
             { new CivilStatus { Id = 6, Description = "Engaged" } }
+        };
+
+        private List<PaymentTypeM> PaymentType_List = new()
+        {
+            { new PaymentTypeM { Id = 1, Description = "Cash" } },
+            { new PaymentTypeM { Id = 2, Description = "GCash / Maya"} },
+            { new PaymentTypeM { Id = 3, Description = "Bank Transfer" } }
         };
     }
 }

@@ -14,7 +14,8 @@
                 GenerateHeader="GenerateHeaderOption.Sticky"
                 Style="height: 100%;overflow:auto;">
 
-    <ChildContent>
+    <ChildContent>        
+        <PropertyColumn Property="@(a => a.Trans_Code)" Title="Code" Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.MemM!.MemberNo)" Title="Member No." Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.MemM!.LastName +", "+ a.MemM!.FirstName)" Title="Name" Width=".5fr" Sortable="true" />
         <PropertyColumn Property="@(a => a.MemM!.Bank_Number)" Title="Payment No." Width=".5fr" Sortable="true" />

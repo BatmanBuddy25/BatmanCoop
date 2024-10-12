@@ -1,5 +1,4 @@
 ﻿using BatmanCoop.Client.Pages.ManpowerPage.DialogPage;
-using BatmanCoopShared.Helper;
 using BatmanCoopShared.Model.ManpowerModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
@@ -20,6 +19,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
         protected override async Task OnInitializedAsync()
         {
             await Task.Delay(1);
+            Member_List.Clear();
             Member_List = await _memberService.GetMasterList();
             IList_Mem = Member_List.AsQueryable();
         }
@@ -61,11 +61,11 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
             int _headcount = await _memberService.Getheadcount() + 1;
             var _memNo = _headcount.ToString().PadLeft(6, '0');
             var _code = $"MN{_memNo}";
-            TokenHelpers.Set_MemberCode(_code);
+            _tokenHelpers.Set_MemberCode(_code);
         }
         private async Task OnSelectItem(MemberM _obj)
         {
-            var _dialog = await _dialogService.ShowDialogAsync<MemberAddPage>(_obj, new DialogParameters()
+            var _dialog = await _dialogService.ShowDialogAsync<MemberEditPage>(_obj, new DialogParameters()
             {
                 Modal = true,
                 Width = "1000px",
@@ -79,12 +79,12 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
 
             });
 
-            //DialogResult? result = await _dialog.Result;
+            DialogResult? result = await _dialog.Result;
 
-            //if (result.Cancelled)
-            //{
-            //    return;
-            //}
+            if (result.Cancelled)
+            {
+                return;
+            }
         }
     }
 }

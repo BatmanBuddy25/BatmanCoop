@@ -1,5 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using BatmanCoop.Client.Helper
 @using BatmanCoopShared.Interfaces.LendInterface
 @using BatmanCoopShared.Interfaces.ManpowerInterface
 @using BatmanCoopShared.Interfaces.TransactionInterface
@@ -26,6 +27,8 @@
 @inject IDialogService _dialogService
 
 @inject IToastService _toastService
+
+@inject TokenHelpers _tokenHelpers
 
 @* Interface and Service *@
 @inject IMemberInt _memberService

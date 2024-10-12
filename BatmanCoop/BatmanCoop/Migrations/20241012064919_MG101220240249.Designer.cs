@@ -4,6 +4,7 @@ using BatmanCoop.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BatmanCoop.Migrations
 {
     [DbContext(typeof(DataBaseConfiguration))]
-    partial class DataBaseConfigurationModelSnapshot : ModelSnapshot
+    [Migration("20241012064919_MG101220240249")]
+    partial class MG101220240249
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,9 +245,6 @@ namespace BatmanCoop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PayTypeMId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ReferralId")
                         .HasColumnType("nvarchar(max)");
 
@@ -255,8 +255,6 @@ namespace BatmanCoop.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PayTypeMId");
 
                     b.ToTable("MemberTable");
                 });
@@ -276,23 +274,6 @@ namespace BatmanCoop.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CivilStatusTable");
-                });
-
-            modelBuilder.Entity("BatmanCoopShared.Model.MasterDataModel.PaymentTypeM", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentTypeTable");
                 });
 
             modelBuilder.Entity("BatmanCoopShared.Model.LendModel.BuyerDetailsModel", b =>
@@ -331,17 +312,6 @@ namespace BatmanCoop.Migrations
                     b.Navigation("BuyM");
 
                     b.Navigation("MemM");
-                });
-
-            modelBuilder.Entity("BatmanCoopShared.Model.ManpowerModel.MemberM", b =>
-                {
-                    b.HasOne("BatmanCoopShared.Model.MasterDataModel.PaymentTypeM", "PayTypeM")
-                        .WithMany()
-                        .HasForeignKey("PayTypeMId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PayTypeM");
                 });
 #pragma warning restore 612, 618
         }

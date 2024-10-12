@@ -15,6 +15,7 @@ namespace BatmanCoop.DatabaseContext
 
         //Master Data
         public DbSet<CivilStatus> CivilStatusTable { get; set; }
+        public DbSet<PaymentTypeM> PaymentTypeTable { get; set; }
 
         //Manpower
         public DbSet<MemberM> MemberTable { get; set; }

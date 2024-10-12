@@ -1,3 +1,4 @@
+using BatmanCoop.Client.Helper;
 using BatmanCoop.Client.Services.LendService;
 using BatmanCoop.Client.Services.TransactionService;
 using BatmanCoop.Components;
@@ -49,6 +50,8 @@ builder.Services.AddScoped<IAttachmentInt, AttachmentRepo>();
 builder.Services.AddScoped<IBuyerInt, BuyerRepo>();
 builder.Services.AddScoped<IBuyerDetailsInt, BuyerDetailsRepo>();
 builder.Services.AddScoped<ITransactionInt, TransactionLogsRepo>();
+
+builder.Services.AddTransient<TokenHelpers>();
 
 var app = builder.Build();
 

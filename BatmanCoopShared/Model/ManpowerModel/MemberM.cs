@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using BatmanCoopShared.Model.MasterDataModel;
 
 namespace BatmanCoopShared.Model.ManpowerModel
 {
@@ -25,6 +26,8 @@ namespace BatmanCoopShared.Model.ManpowerModel
         [Required(ErrorMessage = "Please fill out this field.")]
         public string EmailAdd { get; set; } = string.Empty;
         [Required(ErrorMessage = "Please fill out this field.")]
+        public PaymentTypeM? PayTypeM { get; set; }
+        public int PayTypeMId { get; set; }
         public string Bank_Number { get; set; } = string.Empty;
         public string MemStatus { get; set; } = string.Empty;
         public string? ReferralId { get; set; }

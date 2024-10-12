@@ -1,3 +1,4 @@
+using BatmanCoop.Client.Helper;
 using BatmanCoop.Client.Services.LendService;
 using BatmanCoop.Client.Services.ManpowerService;
 using BatmanCoop.Client.Services.TransactionService;
@@ -24,5 +25,8 @@ builder.Services.AddScoped<IAttachmentInt, AttachmentService>();
 builder.Services.AddScoped<IBuyerInt, BuyerService>();
 builder.Services.AddScoped<IBuyerDetailsInt, BuyerDetailsService>();
 builder.Services.AddScoped<ITransactionInt, TransactionLogsService>();
+
+
+builder.Services.AddTransient<TokenHelpers>();
 
 await builder.Build().RunAsync();

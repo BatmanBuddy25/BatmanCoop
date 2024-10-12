@@ -1,22 +1,22 @@
-﻿using BatmanCoopShared.Model.ManpowerModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BatmanCoopShared.Interfaces.LendInterface;
+using BatmanCoopShared.Interfaces.TransactionInterface;
+using BatmanCoopShared.Model.ManpowerModel;
 
-namespace BatmanCoopShared.Helper
+namespace BatmanCoop.Client.Helper
 {
-    public class TokenHelpers
+    public class TokenHelpers(ITransactionInt translogService)
     {
-        private static string MemberCode = string.Empty;
+        private readonly ITransactionInt _translogService = translogService;
+    
+        private string MemberCode = string.Empty;
 
-        public static void Set_MemberCode(string _paramCode)
+        public  void Set_MemberCode(string _paramCode)
         {
             MemberCode = _paramCode;
         }
-        public static string Get_MemberCode() { 
-        return MemberCode;
+        public string Get_MemberCode()
+        {
+            return MemberCode;
         }
         public static void ConvertStringsToUpperCase<T>(T obj)
         {
@@ -35,9 +35,16 @@ namespace BatmanCoopShared.Helper
             }
         }
 
+        public async Task<string> OnGetmasterno()
+        {
+            string _returnString = string.Empty;
+            int _headcount = await _translogService.Getheadcount() + 1;
+            var _memNo = _headcount.ToString().PadLeft(2, '0');
+            _returnString = $"TN{_memNo}";
+            return _returnString ;
+        }
 
-
-        public static MemberM GetModel()
+        public MemberM GetModel()
         {
             MemberM _obj = new()
             {
@@ -46,7 +53,7 @@ namespace BatmanCoopShared.Helper
                 LastName = "Admin",
                 FirstName = "Coop",
                 MiddleName = "B",
-                BirthDate =  DateTime.Now,
+                BirthDate = DateTime.Now,
                 Age = 1,
                 FullAddress = "Davao City",
                 CivilStatus = "Single",

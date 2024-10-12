@@ -9,9 +9,21 @@ namespace BatmanCoop.Repository.ManpowerRepository
     {
         private readonly DataBaseConfiguration _context = context;
 
+        public async Task<int> Getexistreferal(string _referalId)
+        {
+            var _obj = await _context.MemberTable.Where(a => a.ReferralId == _referalId).CountAsync();
+            return _obj!;
+        }
+
         public  async Task<int> Getheadcount()=> await _context.MemberTable.CountAsync();
 
         public async Task<List<MemberM>> GetMasterList() => await _context.MemberTable.ToListAsync();
+
+        public async Task<MemberM> GetReferalObj(string _referalId)
+        {
+            var _obj = await _context.MemberTable.Where(a => a.ReferralId == _referalId).FirstOrDefaultAsync();
+            return _obj!;
+        }
 
         public async Task<List<MemberM>> GetSortreferal(string _refCode)
         {
@@ -22,8 +34,7 @@ namespace BatmanCoop.Repository.ManpowerRepository
         {
             var _obj = await _context.MemberTable.Where(a => a.Id == memberId).FirstOrDefaultAsync();
             return _obj!;
-        }
-        
+        }        
 
         public async Task InsertMember(MemberM _obj)
         {

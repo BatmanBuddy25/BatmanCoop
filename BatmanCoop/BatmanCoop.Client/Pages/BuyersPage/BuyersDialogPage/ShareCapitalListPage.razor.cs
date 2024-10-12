@@ -57,9 +57,13 @@ namespace BatmanCoop.Client.Pages.BuyersPage.BuyersDialogPage
         }
 
         private async Task OnBuyerDetails(BuyerModel _obj)
-        { 
+        {
+            var _listMem = await _memberService.GetMasterList();
+            var _objMem = _listMem.FirstOrDefault();
+
             ObjDetails.Buy_Count += 1;
-            ObjDetails.MemMId = 2;
+            ObjDetails.MemMId = _objMem!.Id;
+            ObjDetails.BuyMId = _obj.Id;
             var _points = ObjDetails.Share_Capital / 1000;
             ObjDetails.Share_Points = Convert.ToInt32(_points);
             ObjDetails.Buy_Status = "Apply";
@@ -69,7 +73,7 @@ namespace BatmanCoop.Client.Pages.BuyersPage.BuyersDialogPage
         private async Task OnTransaction(BuyerModel _obj)
         {
             await OnGetmasterno();
-            ObjTrans.MemMId = 2;
+            ObjTrans.MemMId = 10;
             ObjTrans.BuyMId = _obj.Id;
             ObjTrans.Buy_Amount = ObjDetails.Share_Capital;
             ObjTrans.Payment_Type = "GCash";

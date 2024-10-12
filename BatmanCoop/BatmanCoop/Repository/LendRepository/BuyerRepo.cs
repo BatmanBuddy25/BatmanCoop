@@ -26,6 +26,7 @@ namespace BatmanCoop.Repository.LendRepository
 
             await _context.SaveChangesAsync();
         }
+            
 
         public async Task<int> Getheadcount() => await _context.BuyerTable.CountAsync();
         public async Task<List<BuyerModel>> GetMasterList() => await _context.BuyerTable.ToListAsync();

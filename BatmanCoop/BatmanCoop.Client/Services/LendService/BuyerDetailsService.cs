@@ -25,5 +25,10 @@ namespace BatmanCoop.Client.Services.LendService
             var _headcount = await _response.Content.ReadFromJsonAsync<int>();
             return _headcount!;
         }
+
+        public Task UpdateBuyerDetails(BuyerDetailsModel _obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
