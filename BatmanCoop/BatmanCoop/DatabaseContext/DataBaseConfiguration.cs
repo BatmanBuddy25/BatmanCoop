@@ -1,4 +1,5 @@
-﻿using BatmanCoopShared.Model.LendModel;
+﻿using BatmanCoopShared.Model.AccountModel;
+using BatmanCoopShared.Model.LendModel;
 using BatmanCoopShared.Model.LogsModel;
 using BatmanCoopShared.Model.ManpowerModel;
 using BatmanCoopShared.Model.MasterDataModel;
@@ -12,6 +13,9 @@ namespace BatmanCoop.DatabaseContext
         {
 
         }
+
+        //Account Data
+        public DbSet<UserAccountM> UserAccountTable { get; set; }
 
         //Master Data
         public DbSet<CivilStatus> CivilStatusTable { get; set; }

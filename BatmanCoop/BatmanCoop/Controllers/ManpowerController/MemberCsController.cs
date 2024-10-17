@@ -41,9 +41,9 @@ namespace BatmanCoop.Controllers.ManpowerController
         }
 
         [HttpGet("Getreferalmember")]
-        public async Task<ActionResult<MemberM>> Getreferalmember([FromQuery] string referalid)
+        public async Task<ActionResult<MemberM>> Getreferalmember([FromQuery] string memberno)
         {
-            var _obj = await _context.MemberTable.FirstOrDefaultAsync(a => a.ReferralId == referalid);
+            var _obj = await _context.MemberTable.FirstOrDefaultAsync(a => a.MemberNo == memberno);
             return _obj!;
         }
 

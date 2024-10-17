@@ -13,21 +13,21 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="row">
+    @* <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
                 <label class="form-label">Shared Number:</label>
                 <FluentTextField @bind-Value="Obj.Buy_Code" Class="form-control" ReadOnly="true" />
             </div>
         </div>
-    </div>
+    </div> *@
     <br />
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
-                <label class="form-label">Share Capital:</label>
-                <FluentNumberField @bind-Value="Obj.Share_Capital" Class="form-control" />
-                <ValidationMessage For="@(() => Obj.Share_Capital)" />
+                <label class="form-label">Share Points:</label>
+                <FluentNumberField @bind-Value="Obj.Share_Points" Class="form-control" />
+                <ValidationMessage For="@(() => Obj.Share_Points)" />
             </div>
         </div>
     </div>

@@ -1,4 +1,5 @@
-﻿using BatmanCoopShared.Model.ManpowerModel;
+﻿using BatmanCoopShared.Model.AccountModel;
+using BatmanCoopShared.Model.ManpowerModel;
 using BatmanCoopShared.Model.MasterDataModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -29,6 +30,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
 
         //int? progressPercent;
         private int WizardIndex = 0;
+        int? payNumber;
         string AttachCode = string.Empty;
         string? progressTitle;
         string? activeid = "tab-1";
@@ -47,9 +49,6 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         bool isBtnBack = false;
         bool isEntReferal = false;
         bool isViewFields = true;
-        bool isPayType1 = true;
-        bool isPayType2 = true;
-
         private string ImgBase64 = "";
 
         protected override async Task OnInitializedAsync()
@@ -81,8 +80,9 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
                 Obj.ReferralName = $"{ObjUser.LastName}, {ObjUser.FirstName} {ObjUser.MiddleName}";
             }
 
+            //Obj.Bank_Number = Convert.ToString(PayNumber);
             Obj.MemStatus = "Application";
-
+            
             //TokenHelpers.ConvertStringsToUpperCase(Obj);
             await _memberService.InsertMember(Obj);
 
@@ -91,7 +91,29 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
                 _item.Member_No = ObjUser.MemberNo;
                 await _attachService.InsertAttachment(_item);
             }
+            await OnRegisterAccount(Obj);
             await Dialog!.CloseAsync(Obj);
+        }
+
+        private async Task OnRegisterAccount(MemberM _obj)
+        {
+            DateTime _dateRenew = DateTime.Now.AddDays(30);
+
+            UserAccountM _objUser = new()
+            {
+                MemMId = _obj.Id,
+                Username = _obj.EmailAdd,
+                Password = "p@ssw0rd",
+                Account_Role = "Member",
+                Def_Pass = "p@ssw0rd",
+                Acc_Status = false,
+                Reg_Status = "Active",
+                Date_Create = DateTime.Now,
+                Date_Renew = _dateRenew,
+                Count_Update = 1
+            };
+
+            await _useraccService.AddAccount(_objUser);
         }
 
         private async Task OnCloseDialog()
@@ -105,7 +127,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             isBtnNext = true;
             isBtnCancel = true;
 
-
+            await OnGetattachcode();
             await MyWizard.GoToStepAsync(WizardIndex + 1);
         }
         private void OnBackTab()
@@ -116,7 +138,6 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
             isBtnCancel = false;
             MyWizard.GoToStepAsync(WizardIndex - 1);
         }
-
         private void OnCalculateAge()
         {
             DateTime _todayDate = DateTime.Today;
@@ -127,7 +148,6 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
 
             Obj.Age = _age;
         }
-
         private async Task OnGetmemberno()
         {
             await Task.Delay(1);
@@ -216,15 +236,10 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
         {
             isPhaseone = false; isPhasetwo = true;
             AttachList.Clear();
-            await OnGetattachcode();
             await _jsrunTime.InvokeAsync<String>("getFrame", "videoFeed", "currentFrame", DotNetObjectReference.Create(this));
             await OnCloseImg();
         }
 
-        private void HandleOnTabChange(FluentTab tab)
-        {
-            changedto = tab;
-        }
 
         [JSInvokable]
         public void ProcessImage(string imageString)
@@ -256,46 +271,35 @@ namespace BatmanCoop.Client.Pages.ManpowerPage.DialogPage
 
         private async Task OnInquireref()
         {
-            if(Obj.ReferralId == "MN000000")
+            try
             {
-                ObjReferal.ReferralId = "MN000000";
-                ObjReferal.ReferralName = "Coop, Admin";
-                isEntReferal = true;
-                isViewFields = false;
-            }
-            else
-            {
-                ObjReferal = await _memberService.GetReferalObj(Obj.ReferralId!);
-                if (ObjReferal == null)
+                if (Obj.ReferralId == "MN000000")
                 {
-                    _toastService.ShowError("No data found");
-                    return;
+                    ObjReferal.ReferralId = "MN000000";
+                    ObjReferal.ReferralName = "Coop, Admin";
+                    isEntReferal = true;
+                    isViewFields = false;
                 }
+                else
+                {
+                    ObjReferal = await _memberService.GetReferalObj(Obj.ReferralId!);
+                    if (ObjReferal == null)
+                    {
+                        _toastService.ShowError("No data found");
+                        return;
+                    }
 
-                isEntReferal = true;
-                isViewFields = false;
-
-                ObjReferal = await _memberService.GetReferalObj(Obj.ReferralId!);
+                    isEntReferal = true;
+                    isViewFields = false;
+                }
             }
+            catch (Exception _ex)
+            {
+                _toastService.ShowError(_ex.Message);
+                return;
+            }           
         }
-
-        private async Task OnChangePayType()
-        {
-            await Task.Delay(1);
-            if(Obj.PayTypeMId == 1)
-            {
-
-            }
-            else if (Obj.PayTypeMId == 2)
-            {
-                isPayType1 = true;
-                isPayType2 = false;
-            }
-            else if (Obj.PayTypeMId == 3)
-            {
-
-            }
-        }
+               
 
         private List<CivilStatus> CivilStatus_List = new()
         {

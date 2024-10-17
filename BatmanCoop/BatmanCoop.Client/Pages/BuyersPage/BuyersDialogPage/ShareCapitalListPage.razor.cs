@@ -94,5 +94,16 @@ namespace BatmanCoop.Client.Pages.BuyersPage.BuyersDialogPage
         {
             await Dialog!.CancelAsync();
         }
+
+        private int GetTotalPoints()
+        {
+            int _returnPoints = 0;
+            foreach (var _item in Buyer_List)
+            {
+                _returnPoints += _item.Share_Points;
+            }
+
+            return _returnPoints;
+        }
     }
 }

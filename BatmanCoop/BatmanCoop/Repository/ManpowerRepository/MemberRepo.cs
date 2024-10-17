@@ -19,9 +19,9 @@ namespace BatmanCoop.Repository.ManpowerRepository
 
         public async Task<List<MemberM>> GetMasterList() => await _context.MemberTable.ToListAsync();
 
-        public async Task<MemberM> GetReferalObj(string _referalId)
+        public async Task<MemberM> GetReferalObj(string _memberno)
         {
-            var _obj = await _context.MemberTable.Where(a => a.ReferralId == _referalId).FirstOrDefaultAsync();
+            var _obj = await _context.MemberTable.Where(a => a.MemberNo == _memberno).FirstOrDefaultAsync();
             return _obj!;
         }
 

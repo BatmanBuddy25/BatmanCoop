@@ -17,8 +17,6 @@
     }
 }
 
-
-
 function getFrame(src, dest, dotNetHelper) {
     let video = document.getElementById(src);
     let canvas = document.getElementById(dest);
@@ -27,8 +25,6 @@ function getFrame(src, dest, dotNetHelper) {
     let dataUrl = canvas.toDataURL("image/jpeg");
     dotNetHelper.invokeMethodAsync('ProcessImage', dataUrl);
 }
-
-
 
 function stopVideo(src) {
     let video = document.getElementById(src);

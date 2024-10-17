@@ -1,6 +1,7 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
 @using BatmanCoop.Client.Helper
+@using BatmanCoopShared.Interfaces.AccountInterface
 @using BatmanCoopShared.Interfaces.LendInterface
 @using BatmanCoopShared.Interfaces.ManpowerInterface
 @using BatmanCoopShared.Interfaces.TransactionInterface
@@ -19,7 +20,7 @@
 @using BatmanCoopShared.Model.LendModel
 
 
-@inject NavigationManager _navigation
+@inject NavigationManager _navigationManager
 @inject IJSRuntime _jsrunTime
 
 
@@ -36,4 +37,5 @@
 @inject IBuyerInt _buyerService
 @inject IBuyerDetailsInt _buyerDetailsService
 @inject ITransactionInt _translogService
+@inject IUserAccountInt _useraccService
 

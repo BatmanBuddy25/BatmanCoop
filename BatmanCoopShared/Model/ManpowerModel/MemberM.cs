@@ -24,9 +24,9 @@ namespace BatmanCoopShared.Model.ManpowerModel
         [Required(ErrorMessage = "Please fill out this field.")]
         public string Contact { get; set; } = string.Empty;
         [Required(ErrorMessage = "Please fill out this field.")]
-        public string EmailAdd { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Please fill out this field.")]
+        public string EmailAdd { get; set; } = string.Empty;        
         public PaymentTypeM? PayTypeM { get; set; }
+        [Required(ErrorMessage = "Please fill out this field.")]
         public int PayTypeMId { get; set; }
         public string Bank_Number { get; set; } = string.Empty;
         public string MemStatus { get; set; } = string.Empty;

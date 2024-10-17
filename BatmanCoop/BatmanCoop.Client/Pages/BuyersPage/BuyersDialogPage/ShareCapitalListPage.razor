@@ -23,7 +23,8 @@
 
                 <ChildContent>
                     <PropertyColumn Property="@(a => a.Buy_Code)" Title="Account No." Width=".5fr" Sortable="true" />
-                    <PropertyColumn Property="@(a => "₱ "+a.Share_Capital)" Title="Capital" Width=".5fr" Sortable="true" />
+                    <PropertyColumn Property="@(a => a.Share_Points)" Title="Points" Width=".5fr" Sortable="true" />
+                    @* <PropertyColumn Property="@(a => "₱ "+a.Share_Capital)" Title="Capital" Width=".5fr" Sortable="true" /> *@
                     <PropertyColumn Property="@(a => a.Created_Date.ToShortDateString())" Title="Date" Width=".5fr" Sortable="true" />
                     <PropertyColumn Property="@(a => a.Share_Status)" Title="Status" Width=".5fr" Sortable="true" />
                     <TemplateColumn Title="Actions" Align="@Align.End">
@@ -47,7 +48,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="form-label">Capital:</label>
-                            <FluentNumberField @bind-Value="ObjDetails.Share_Capital" Class="form-control" />
+                            <FluentNumberField @bind-Value="ObjDetails.Points_Amount" Class="form-control" />
                             @* <ValidationMessage For="@(() => ObjDetails.Share_Capital)" /> *@
                         </div>
                     </div>

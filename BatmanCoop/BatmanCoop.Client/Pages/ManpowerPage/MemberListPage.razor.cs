@@ -51,7 +51,7 @@ namespace BatmanCoop.Client.Pages.ManpowerPage
         private async Task OnAddPage()
         {
             await Task.Delay(1);
-            _navigation.NavigateTo("/member-info");
+            _navigationManager.NavigateTo("/member-info");
         }
 
         private async Task OnGetmemberno()

@@ -16,30 +16,32 @@
 </FluentDialogHeader>
 
 <FluentDialogBody>
-
     <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" hidden="@isEntReferal">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="form-label">Referal Code:</label>
-                    <FluentTextField @bind-Value="Obj.ReferralId" Style="width: 100%;" Class="form-control" />                    
+                    <FluentTextField @bind-Value="Obj.ReferralId" Style="width: 100%;" Class="form-control" />
                 </div>
             </div>
         </div>
         <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.End" Style="margin-top:20px;">
             <FluentButton IconStart="@(new Icons.Regular.Size16.Search())" Appearance="Appearance.Accent"  OnClick="OnInquireref">
                 Search
-            </FluentButton>          
+            </FluentButton>
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Dismiss())" Appearance="Appearance.Accent" OnClick="OnCloseDialog">
+                Close
+            </FluentButton>
         </FluentStack>
     </FluentStack>
-
 
     <FluentWizard Style="height: auto !important; " @bind-Value="@WizardIndex" @ref="@MyWizard" StepperPosition="StepperPosition.Top" StepSequence="WizardStepSequence.Linear" DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)" hidden="@isViewFields">
         <Steps>
             <FluentWizardStep Label="Step 1">
                 <div style="padding-left: 8px;">
-                    <EditForm Model="@Obj" OnValidSubmit="OnNextTab">
+                    <EditForm Model="@Obj" OnValidSubmit="OnNextTab" style="width:100%;">
                         <DataAnnotationsValidator />
+                       @*  <ValidationSummary/> *@
                         <div class="row">
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
@@ -114,10 +116,10 @@
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Payment Type:</label>
-                                    <InputSelect @bind-Value="@Obj.PayTypeMId"  Class="form-control" >
+                                    <InputSelect @bind-Value="@Obj.PayTypeMId"  Class="form-control" >                                        
                                         @if (PaymentType_List != null)
                                         {
-                                            <option value="">Select payment type</option>
+                                            <option value="0">Select payment type</option>
                                             @foreach (var _item in PaymentType_List)
                                             {
                                                 <option value="@_item.Id">@_item.Description</option>
@@ -127,25 +129,27 @@
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <div class="form-group">
-                                    
-
+                                <div class="form-group">          
                                     @if(Obj.PayTypeMId == 1)
                                     {
                                         <label class="form-label">Receipt No:</label>
                                         <FluentTextField @bind-Value="Obj.Bank_Number" Class="form-control"  />
-                                        <ValidationMessage For="@(() => Obj.Bank_Number)" />
                                     }
                                     else if(Obj.PayTypeMId == 2)
                                     {
                                         <label class="form-label">Gcash / Maya:</label>
                                         <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Bottom">
                                             <label class="form-label">+63</label>
+                                          @*   <FluentNumberField @bind-Value="payNumber" Class="form-control" MaxLength="10" /> *@
                                             <FluentTextField @bind-Value="Obj.Bank_Number" Class="form-control" Maxlength="10" />
                                         </FluentStack>
-                                        <ValidationMessage For="@(() => Obj.Bank_Number)" />
                                     }
-
+                                    else if (Obj.PayTypeMId == 3)
+                                    {
+                                        <label class="form-label">Account No.:</label>
+                                        @* <FluentNumberField @bind-Value="payNumber" Class="form-control" /> *@
+                                        <FluentTextField @bind-Value="Obj.Bank_Number" Class="form-control" />
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -174,7 +178,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">Referal Name:</label> 
-                                    @if(Obj.ReferralId == "MN000000")
+                                    @if(Obj.MemberNo == "MN000000")
                                     {
                                         <FluentLabel Class="form-control">@ObjReferal?.ReferralName</FluentLabel>
                                     }
@@ -198,26 +202,16 @@
                 </div>
             </FluentWizardStep>
 
-            <FluentWizardStep Label="Step 2">
-                @*  <LoadingContent>
-                <FluentProgressRing />
-                </LoadingContent> *@
+            <FluentWizardStep Label="Step 2">              
                 <div>
                     <FluentStack Orientation="Orientation.Vertical" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Center">
                         <FluentStack Orientation="Orientation.Vertical" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Center" style="border-color:#ced0d2;">
                             <div style="border: 2px solid #dee2e6;border-radius: 16px;display: flex;justify-content: center;margin-top: 12px;background-color: #fbfbfb;">
-                                <img src="@ImgBase64" alt="dp" style="width: 100%;object-fit: fill;" hidden="@isImgShow" />
-                                <video id="videoFeed" style="object-fit: fill;" width="320" height="260" hidden="@isCaptureShow" />
-                                <canvas class="d-none" style="object-fit: fill;" id="currentFrame" width="320" height="260" hidden="@isCaptureShow" />
+                                <img src="@ImgBase64" alt="dp" style="width: 100%;object-fit: fill;" hidden="@isImgShow" /> @* hidden="@isImgShow" *@
+                                <video id="videoFeed" style="object-fit: fill;" width="320" height="260" hidden="@isCaptureShow" />    @* hidden="@isCaptureShow" *@
+                                <canvas class="d-none" style="object-fit: fill;" id="currentFrame" width="320" height="260" hidden="@isCaptureShow" />     @* hidden="@isCaptureShow" *@
                             </div>
                         </FluentStack>
-
-                        @*  OnCompleted="@OnCompleted" *@
-                        @* <FluentProgress Min="0" Max="100" Value="@progressPercent" Visible="@(progressPercent > 0)" /> *@
-                        @*  <FluentLabel Alignment="HorizontalAlignment.Center">
-                        @progressTitle
-                        </FluentLabel>  hidden="@isPhaseone"  hidden="@isPhasetwo"*@
-
                         <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" hidden="@isPhaseone">
                             <FluentInputFile @ref="@attachments"
                                              AnchorId="MyUploadStream"

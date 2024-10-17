@@ -22,6 +22,59 @@ namespace BatmanCoop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BatmanCoopShared.Model.AccountModel.UserAccountM", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Acc_Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Account_Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Count_Update")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date_Create")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Date_Expire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Date_Renew")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Def_Pass")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MemMId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reg_Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemMId");
+
+                    b.ToTable("UserAccountTable");
+                });
+
             modelBuilder.Entity("BatmanCoopShared.Model.LendModel.BuyerDetailsModel", b =>
                 {
                     b.Property<int>("Id")
@@ -293,6 +346,17 @@ namespace BatmanCoop.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PaymentTypeTable");
+                });
+
+            modelBuilder.Entity("BatmanCoopShared.Model.AccountModel.UserAccountM", b =>
+                {
+                    b.HasOne("BatmanCoopShared.Model.ManpowerModel.MemberM", "MemM")
+                        .WithMany()
+                        .HasForeignKey("MemMId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MemM");
                 });
 
             modelBuilder.Entity("BatmanCoopShared.Model.LendModel.BuyerDetailsModel", b =>

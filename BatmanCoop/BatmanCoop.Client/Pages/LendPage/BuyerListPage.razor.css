@@ -1,0 +1,18 @@
+﻿.my-labels {
+    color: #6A707D;
+    font-size: .75rem;
+}
+
+.my-details {
+    color: #757A90;
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.my-details-box {
+    background-color: #F7F8FF;
+    padding: 7px 15px 7px 15px;
+    border-radius: 10px;
+    min-height: 54.02px;
+    word-wrap: break-word;
+}

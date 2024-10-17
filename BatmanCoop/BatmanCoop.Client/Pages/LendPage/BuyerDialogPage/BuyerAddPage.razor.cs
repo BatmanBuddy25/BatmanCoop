@@ -36,7 +36,7 @@ namespace BatmanCoop.Client.Pages.LendPage.BuyerDialogPage
 
         private async Task OnSaveData()
         {
-
+            Obj.Share_Capital = Obj.Share_Points * 1000;
             Obj.Share_Status = "Open";
             await _buyerService.AddBuyer(Obj);
             await Dialog!.CloseAsync(Obj);

@@ -1,0 +1,162 @@
+﻿@page "/"
+@using BatmanCoop.Client.Pages.ManpowerPage.DialogPage
+@using BatmanCoop.Components.Layout
+@using BatmanCoop.DatabaseContext
+@using BatmanCoopShared.Model.AccountModel
+@using System.Security.Claims
+
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.EntityFrameworkCore
+
+
+@layout AuthLayout
+@inject DataBaseConfiguration _dbConfig
+
+
+<PageTitle>Batman Coop</PageTitle>
+
+<FluentToastProvider Position="ToastPosition.BottomRight" Timeout="5000" />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />
+
+<center>
+    <div class="col-8 card">
+        <div class="col-12 row">
+            <p>&nbsp;</p>
+        </div>
+        <div class="col-12 row">
+            <div class="col-6" style="border-right:groove;">
+                <img src="./img/batmancoop.png" style="width:400px; height:400px;" />
+            </div>
+            <div class="col-6">
+                <EditForm Model="@ObjDTO" OnValidSubmit="@OnLoginform" FormName="LoginForm">                    
+                    <DataAnnotationsValidator />
+                    @if (_showAlert)
+                    {
+                        <FluentMessageBar Intent="@MessageIntent.Error">
+                            @_showMessage
+                        </FluentMessageBar>
+                    }
+                    <div>
+                        <br /><br /><br /><br />
+                    </div>
+                    <div>
+                        <h3 style="font-weight:bold; color:black">Batman Coop Login</h3>
+                    </div>
+                    <div>
+                        <br />
+                    </div>
+                    <div class="col-sm-12 row">
+                        <div class="form-group">
+                            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="padding:0px;">
+                                <FluentIcon Value="@(new Icons.Regular.Size32.Mail().WithColor("black"))" />
+                                <InputText @bind-Value="ObjDTO.Username" placeholder="Username" class="form-control" />
+                                <ValidationMessage For="() => ObjDTO.Username" />
+                            </FluentStack>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-sm-12 row">
+                        <div class="form-group">
+                            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="padding:0px;">
+                                <FluentIcon Value="@(new Icons.Regular.Size32.Key().WithColor("black"))" />
+                                <InputText @bind-Value="ObjDTO.Password" placeholder="Password" class="form-control" type="password" />
+                                <ValidationMessage For="() => ObjDTO.Password" />
+                            </FluentStack>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-12 row "  >
+                        <div class="d-flex gap-3">
+                            <button class="btn btn-dark w-100" type="submit">
+                                Login
+                            </button>
+                            <button class="btn btn-light w-100" style="border-color:black;" type="button" @onclick="OnRegister">
+                                Register
+                            </button>
+                        </div>                        
+                    </div>
+                    <br />
+                    <div class="col-12 row" style="text-align:left; font-weight:bold">
+                        <span class="col-12">@LoginMesssage</span>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+        <div class="col-12 row">
+            <p>&nbsp;</p>
+        </div>
+    </div>
+</center>
+
+@code {
+
+    [CascadingParameter]
+    public HttpContext? _httpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    private UserDTO ObjDTO { get; set; } = new();
+
+
+    public string LoginMesssage { get; set; } = string.Empty;
+    private bool _showAlert = false;
+    private string _showMessage = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        if (_tokenService.MemId != 0)
+        {
+            _navigationManager.NavigateTo("/dashboard");
+        }
+    }
+
+    private async Task OnLoginform()
+    {
+        var _userAccount = _dbConfig.UserAccountTable.Include(b => b.MemM).Where(a => a.Username == ObjDTO.Username).FirstOrDefault();
+        if (_userAccount is null || _userAccount.Password != ObjDTO.Password)
+        {
+            _showAlert = true;
+            _showMessage = "Invalid Username or Password";
+            return;
+        }
+
+        var _claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.PrimarySid, _userAccount.Id.ToString()),
+                new Claim(ClaimTypes.Name, ObjDTO.Username!),
+                new Claim(ClaimTypes.Role, _userAccount.Account_Role),
+                new Claim(ClaimTypes.Role, _userAccount.Account_Role),
+                new Claim(ClaimTypes.Sid, _userAccount.MemMId.ToString())
+            };
+
+        var _identity = new ClaimsIdentity(_claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var _principal = new ClaimsPrincipal(_identity);
+        await _httpContext!.SignInAsync(_principal);
+
+        _userAccount.Acc_Status = true;
+        await _useraccountService.UpdateAccount(_userAccount);
+
+        _navigationManager.NavigateTo("/dashboard");
+    }
+
+    private async Task OnRegister()
+    {
+        var _dialog = await _dialogService.ShowDialogAsync<MemberAddPage>(null!, new DialogParameters()
+            {
+                Modal = true,
+                Width = "1000px",
+                PreventDismissOnOverlayClick = true,
+                TrapFocus = false
+            });
+        DialogResult? result = await _dialog.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+    }
+}

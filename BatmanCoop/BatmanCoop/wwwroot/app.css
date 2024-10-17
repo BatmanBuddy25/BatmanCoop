@@ -13,14 +13,15 @@ body {
 }
 
 .main {
-    min-height: calc(100dvh - 86px);
+    /*min-height: calc(100dvh - 86px);*/
+    min-height: calc(100dvh);
     color: var(--neutral-foreground-rest);
     align-items: stretch !important;
 }
 
 .body-content {
     align-self: stretch;
-    height: calc(100dvh - 86px) !important;
+   /* height: calc(100dvh - 86px) !important;*/
     display: flex;
 }
 
@@ -156,6 +157,8 @@ code {
         }
 
     .navmenu {
+        color:black;
+        background-color: black;
         width: 100%;
     }
 

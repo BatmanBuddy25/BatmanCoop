@@ -47,9 +47,9 @@ namespace BatmanCoop.Client.Services.ManpowerService
             await _httpClient.PutAsJsonAsync("api/MemberCs/Putobj", _obj);
         }
 
-        public async Task<MemberM> GetReferalObj(string _referalId)
+        public async Task<MemberM> GetReferalObj(string _memberno)
         {
-            var _response = await _httpClient.GetAsync($"api/MemberCs/Getreferalmember?referalid={_referalId}");
+            var _response = await _httpClient.GetAsync($"api/MemberCs/Getreferalmember?memberno={_memberno}");
             var _masterlist = await _response.Content.ReadFromJsonAsync<MemberM>();
             return _masterlist!;
         }

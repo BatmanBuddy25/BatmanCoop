@@ -14,6 +14,8 @@ namespace BatmanCoop.Client.Pages.LendPage
 
         private bool _trapFocus = true;
         private bool _modal = true;
+        int TotalPoints = 0;
+        decimal TotalCapital = 0;
 
         PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
         DataGridSelectMode Mode = DataGridSelectMode.Single;
@@ -23,6 +25,10 @@ namespace BatmanCoop.Client.Pages.LendPage
             await Task.Delay(1);
             Buyer_List = await _buyerService.GetMasterList();
             IList_Buyer = Buyer_List.AsQueryable();
+            
+            TotalPoints = GetTotalPoints();
+            TotalCapital = GetTotalCapital();
+            //await OpenPanelRightAsync();
         }
 
         private async Task OnAddBuyer()
@@ -48,6 +54,28 @@ namespace BatmanCoop.Client.Pages.LendPage
                 IList_Buyer = Buyer_List.AsQueryable();
                 _toastService.ShowSuccess("Added Successfully");
             }
+        }
+
+        private decimal GetTotalCapital() 
+        {
+            decimal _returnCapital = 0;
+            foreach(var _item in Buyer_List)
+            {
+                _returnCapital += _item.Share_Capital;
+            }
+
+            return _returnCapital;
+        }
+
+        private int GetTotalPoints()
+        {
+            int _returnPoints = 0;
+            foreach (var _item in Buyer_List)
+            {
+                _returnPoints += _item.Share_Points;
+            }
+
+            return _returnPoints;
         }
     }
 }

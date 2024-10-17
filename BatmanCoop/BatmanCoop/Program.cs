@@ -1,14 +1,16 @@
 using BatmanCoop.Client.Helper;
-using BatmanCoop.Client.Services.LendService;
-using BatmanCoop.Client.Services.TransactionService;
 using BatmanCoop.Components;
 using BatmanCoop.DatabaseContext;
+using BatmanCoop.Repository.AccountRepository;
 using BatmanCoop.Repository.LendRepository;
 using BatmanCoop.Repository.ManpowerRepository;
 using BatmanCoop.Repository.TransactionRepository;
+using BatmanCoopShared.Interfaces.AccountInterface;
 using BatmanCoopShared.Interfaces.LendInterface;
 using BatmanCoopShared.Interfaces.ManpowerInterface;
 using BatmanCoopShared.Interfaces.TransactionInterface;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
 
@@ -20,8 +22,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 
-
-
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAddress").Value!)
@@ -31,6 +31,19 @@ builder.Services.AddDbContext<DataBaseConfiguration>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.Cookie.Name = "batman_token";
+        option.LoginPath = "/";
+        //option.Cookie.MaxAge = TimeSpan.FromMinutes(10);
+        option.AccessDeniedPath = "/access-error";
+    });
+
 
 builder.Services.AddFluentUIComponents();
 builder.Services.AddDataGridEntityFrameworkAdapter();
@@ -51,7 +64,10 @@ builder.Services.AddScoped<IBuyerInt, BuyerRepo>();
 builder.Services.AddScoped<IBuyerDetailsInt, BuyerDetailsRepo>();
 builder.Services.AddScoped<ITransactionInt, TransactionLogsRepo>();
 
+builder.Services.AddScoped<IUserAccountInt, UserAccountRepo>();
+
 builder.Services.AddTransient<TokenHelpers>();
+builder.Services.AddTransient<TokenService>();
 
 var app = builder.Build();
 
@@ -72,6 +88,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
