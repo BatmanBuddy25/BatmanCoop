@@ -8,21 +8,33 @@
 <FluentMessageBarProvider />
 
 <div class="navmenu">
+    @if (expanded)
+    {
+        <div style="display: flex;justify-content: center;margin: 8px 0px 16px 0px;">
+            <img style="width:135px;" src="./img/bllogo.png" alt="batmancoop" />
+        </div>
+    }
+    else
+    {
+        <div style="display: flex;justify-content: center;margin: 8px 0px 12px 0px;">
+            <img style="width:30px;" src="./img/bslogo.png" alt="batmancoop" />
+        </div>
+    }
+
     <input type="checkbox" title="Menu expand/collapse toggle" id="navmenu-toggle" class="navmenu-icon" />
     <label for="navmenu-toggle" class="navmenu-icon"><FluentIcon Value="@(new Icons.Regular.Size20.Navigation().WithColor("black"))"  /></label>
     <nav class="sitenav" aria-labelledby="main-menu">
-        <FluentNavMenu Id="main-menu" Width="250" Collapsible="true" Title="Navigation menu" @bind-Expanded="expanded" CustomToggle="true">
-            <FluentNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home().WithColor("black"))" >Dashboard</FluentNavLink>
-
-            <FluentNavGroup Id="Group1" Title="Admin" Icon="@(new Icons.Regular.Size24.LeafOne())">
-                <FluentNavLink Href="member-list" Icon="@(new Icons.Regular.Size20.PeopleCommunity())" IconColor="Color.Accent">Member List</FluentNavLink>
-                <FluentNavLink Href="buyer-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Share Capital List</FluentNavLink>
-                <FluentNavLink Href="buyermem-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Buyers</FluentNavLink>
-                <FluentNavLink Href="transactionlogs-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro())" IconColor="Color.Accent">Transaction Logs</FluentNavLink>
+        <FluentNavMenu Id="main-menu"  Width="250" Collapsible="true" Title="Navigation menu" @bind-Expanded="expanded" CustomToggle="true">
+            <FluentNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home().WithColor("white"))" >Dashboard</FluentNavLink>
+            <FluentNavGroup Id="Group1" Title="Admin" Icon="@(new Icons.Regular.Size24.LeafOne().WithColor("white"))">
+                <FluentNavLink Href="member-list" Icon="@(new Icons.Regular.Size20.PeopleCommunity().WithColor("white"))">Member List</FluentNavLink>
+                <FluentNavLink Href="buyer-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro().WithColor("white"))">Share Capital List</FluentNavLink>
+                <FluentNavLink Href="buyermem-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro().WithColor("white"))">Buyers</FluentNavLink>
+                <FluentNavLink Href="transactionlogs-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro().WithColor("white"))">Transaction Logs</FluentNavLink>
             </FluentNavGroup>
 
-            <FluentNavGroup Id="Group2" Title="Member" Icon="@(new Icons.Regular.Size24.LeafOne().WithColor("black"))">                
-                <FluentNavLink Href="buyerinfo-list" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro().WithColor("black"))" >Account</FluentNavLink>
+            <FluentNavGroup Id="Group2" Title="Member" Icon="@(new Icons.Regular.Size24.LeafOne().WithColor("white"))">
+                <FluentNavLink Href="member-info" Icon="@(new Icons.Regular.Size20.CurrencyDollarEuro().WithColor("white"))">Account</FluentNavLink>
             </FluentNavGroup>
         </FluentNavMenu>
     </nav>

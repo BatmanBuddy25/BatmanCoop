@@ -3,37 +3,44 @@
 @rendermode InteractiveAuto
 
 
-<PageTitle>Buyer List</PageTitle>
+<PageTitle>Buyer</PageTitle>
 
-
-<div>
-    <div class="row">
-
-        <div class="col" style="height: 100%;">
-            <FluentDataGrid Items="@IList_Buyer" Pagination="@pagination" ShowHover="true" GenerateHeader="GenerateHeaderOption.Sticky" Style="height: 100%;overflow:auto;">
-                <ChildContent>
-                    <PropertyColumn Property="@(a => a.Buy_Code)" Title="Account No." Width=".5fr" Sortable="true" />
-                    <PropertyColumn Property="@(a => a.Share_Points)" Title="Points" Width=".5fr" Sortable="true" />
-                    <PropertyColumn Property="@(a => a.Created_Date.ToShortDateString())" Title="Date" Width=".5fr" Sortable="true" />
-                    <PropertyColumn Property="@(a => a.Share_Status)" Title="Status" Width=".5fr" Sortable="true" />
-                </ChildContent>
-                <EmptyContent>
-                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
-                        <div> No Data Found</div>
-                    </FluentStack>
-                </EmptyContent>
-            </FluentDataGrid>
-            <FluentPaginator State="@pagination" />
-        </div>
-
-        <div class="col-sm-12 col-md-3">
-            <div class="d-flex flex-column left-panel gap-3">
-                <div class="d-flex align-items-left">
-                    <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="OnAddBuyer">
-                        Add
-                    </FluentButton>
+<FluentStack Orientation="Orientation.Vertical" VerticalGap="16">
+    <div style="width:100%;">        
+        <FluentGrid Justify="JustifyContent.SpaceBetween">
+            <FluentGridItem>
+                <FluentLabel Typo="Typography.H3"> Share Capital List </FluentLabel>
+            </FluentGridItem>
+            <FluentGridItem>
+                <FluentStack VerticalAlignment="VerticalAlignment.Center">
+                    <button class="btn btn-dark" type="button" @onclick="OnAddBuyer">
+                        <i class="bi bi-plus-lg" /> Add
+                    </button>
+                </FluentStack>
+            </FluentGridItem>
+        </FluentGrid>
+    </div>
+    <div style="width:100%;">
+        <FluentStack Orientation="Orientation.Horizontal" VerticalGap="8">
+            <div class="main-page-box" style="width: 100%;">
+                <div style="width: 100%;border-radius: 12px;">
+                    <FluentDataGrid Items="@IList_Buyer" Pagination="@pagination" ShowHover="true" GenerateHeader="GenerateHeaderOption.Sticky">
+                        <ChildContent>
+                            <PropertyColumn Property="@(a => a.Buy_Code)" Title="Account No." Width=".5fr" Sortable="true" />
+                            <PropertyColumn Property="@(a => a.Share_Points)" Title="Points" Width=".5fr" Sortable="true" />
+                            <PropertyColumn Property="@(a => a.Created_Date.ToShortDateString())" Title="Date" Width=".5fr" Sortable="true" />
+                            <PropertyColumn Property="@(a => a.Share_Status)" Title="Status" Width=".5fr" Sortable="true" />
+                        </ChildContent>
+                        <EmptyContent>
+                            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                                <div> No Data Found</div>
+                            </FluentStack>
+                        </EmptyContent>
+                    </FluentDataGrid>
+                    <FluentPaginator State="@pagination" />
                 </div>
-
+            </div>
+            <div style="width:30%;">
                 <div class="d-flex flex-column gap-2">
                     <div class="d-flex flex-column my-details-box">
                         <div class="my-labels">Total Points:</div>
@@ -44,18 +51,7 @@
                         <div class="my-details">₱ @TotalCapital</div>
                     </div>
                 </div>
-
             </div>
-
-            @*  <br />
-            <div class="row">
-            <div class="col-sm-12">
-            <div class="form-group">
-            <label class="form-label">Last Name:</label>
-            <FluentNumberField @bind-Value="TotalPoints" Class="form-control" />
-            </div>
-            </div>
-            </div> *@
-        </div>
-    </div>
-</div>
+        </FluentStack>
+    </div>    
+</FluentStack>

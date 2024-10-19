@@ -1,0 +1,211 @@
+﻿:root {
+    --body-font: 'Poppins', sans-serif !important;
+    --neutral-fill-layer-rest: #e9ecef !important;
+    --neutral-foreground-rest: #424242 !important;
+    --accent-fill-rest: #27374d !important;
+    /*--neutral-fill-secondary-rest: #e9ecef !important;*/
+    /*--datagrid-hover-color: rgba(0,0,0,0.058823529411764705) !important;*/
+    /*--neutral-fill-stealth-rest: #e9ecef !important;*/ /* #fbfbfb - original */
+    /*--neutral-fill-stealth-hover: rgba(0,0,0,0.058823529411764705) !important;*/ /*#efefef - original*/
+    /*--neutral-stroke-input-rest: none !important;*/ /*linear-gradient(#efefef calc(100% - 1px), #929292 calc(100% - 1px), #929292)*/
+    /*--neutral-fill-input-rest: none !important;*/ /*#ffffff*/
+    /*--neutral-fill-input-hover: none !important;*/ /*#f7f7f7;*/
+    /*--neutral-fill-input-focus: transparent !important;*/ /*#ffffff;*/
+    /*--neutral-fill-rest: #e9ecef !important;*/ /*#ffffff*/
+    /*--neutral-fill-hover: rgba(0,0,0,0.058823529411764705) !important;*/ /*#f7f7f7*/
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: var(--type-ramp-base-font-size);
+    line-height: var(--type-ramp-base-line-height);
+    font-weight: var(--font-weight);
+    color: var(--neutral-foreground-rest);
+    background: var(--neutral-fill-layer-rest);
+}
+
+.body-content {
+    height: 93vh !important;
+}
+
+.fluent-typography {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.header {
+    background: transparent !important;
+}
+
+.sonic-logo-name {
+    width: 135px;
+}
+
+.sonic-logo-logo {
+    width: 30px;
+}
+
+.navmenu {
+    border-radius: 20px;
+    box-shadow: -5px -5px 10px #fff,5px 13px 20px #cacdcf;
+    border: none;
+    padding: 8px;
+    margin: 16px 0px 16px 8px;
+    background-color: black;
+}
+
+.nav-menu-hr {
+    margin: 6px 8px;
+    color: inherit;
+    border: 0;
+    border-top: var(--bs-border-width) solid;
+    opacity: 0.03;
+    background-color: white;
+}
+
+/*#region NAV MENU */
+/*EXPANDER*/
+#main-menu {
+    max-height: 87vh;
+    overflow-y: auto;
+    color: white;
+}
+
+    #main-menu #main-menu-expander .positioning-region {
+        background: transparent;
+    }
+
+#main-menu-expander .positioning-region:hover {
+    background: rgba(0,0,0,0.058823529411764705);
+}
+
+/*ACTIVE MENU*/
+#main-menu .fluent-nav-item .fluent-nav-link.active .positioning-region {
+    background: rgba(0,0,0,0.058823529411764705);
+    background-color: white;
+    color: black;
+    font-weight: 600;
+}
+#main-menu .fluent-nav-item .fluent-nav-link.active .fluent-nav-icon {
+    fill: black !important;
+}
+
+    #main-menu .fluent-nav-item .fluent-nav-icon {
+        fill: white !important;
+    }
+
+#main-menu .fluent-nav-item a.active .positioning-region::before {
+    background: white !important;
+}
+/*DEFAULT MENU*/
+#main-menu .fluent-nav-item .fluent-nav-link .positioning-region {
+    background: transparent;
+}
+
+    #main-menu .fluent-nav-item .fluent-nav-link .positioning-region:hover {
+        background: white;
+        color: black;
+    }
+        #main-menu .fluent-nav-item .fluent-nav-link .positioning-region:hover .fluent-nav-icon {
+            fill: black !important;
+        }
+        #main-menu .fluent-nav-item .fluent-nav-link .positioning-region:hover .expand-collapse-button svg {
+            fill: black !important;
+        }
+
+#main-menu .fluent-nav-text {
+    text-wrap: wrap;
+    TEXT-ALIGN: START;
+}
+#main-menu .expand-collapse-button svg {
+    fill: white !important;
+}
+
+#main-menu-expander svg {
+    fill: white !important;
+}
+/*#endregion */
+/*#region JOB INFORMATION ADDITIONAL INFO TAB */
+fluent-tabs.PosHisTab::part(activeIndicator) {
+    width: 100%;
+    background-color: #0d47a1;
+}
+
+.PosHisTab fluent-tab[aria-selected="true"] {
+    color: #0d47a1;
+}
+
+.PosHisTab fluent-tab {
+    font-size: 16px;
+}
+
+    .PosHisTab fluent-tab:hover {
+        color: #27374d;
+    }
+
+/*#endregion */
+
+/*#region USER MENU */
+.UserDropDown .dropdown-menu {
+    border-radius: 10px;
+    padding: 8px;
+    background: #faf9f9;
+    border: 1px solid rgba(0,0,0,.10);
+    -webkit-box-shadow: 0px 7px 18px -6px rgba(0,0,0,0.15);
+    box-shadow: 0px 7px 18px -6px rgba(0,0,0,0.15);
+}
+
+    .UserDropDown .dropdown-menu.show li {
+        border-radius: 10px !important;
+    }
+
+        .UserDropDown .dropdown-menu.show li:hover {
+            border-radius: 10px !important;
+        }
+
+.dropdown-item.userdropbtn {
+    border-radius: 8px;
+    padding: 12px;
+}
+
+    .dropdown-item.userdropbtn.profile {
+        cursor: pointer;
+    }
+
+        .dropdown-item.userdropbtn.profile:hover {
+            background: #e4e7e8;
+        }
+
+    .dropdown-item.userdropbtn:hover {
+        background: #e4e7e8;
+    }
+
+.fluent-persona .initials {
+    background: #e9ecef !important;
+}
+/*#endregion */
+
+/*#region MESSAGE BAR */
+.fluent-messagebar.intent-info {
+    border: 1px solid #9fd0e8 !important;
+    background-color: #cde8f5 !important;
+}
+
+    .fluent-messagebar.intent-info .fluent-messagebar-icon svg {
+        fill: #22679c !important;
+    }
+
+    .fluent-messagebar.intent-info .fluent-messagebar-message {
+        color: #22679c !important;
+    }
+/*#endregion */
+
+/*#region UPLOAD CONTENT */
+.fluent-inputfile-container .inputfile-content {
+    z-index: 1 !important;
+}
+/*#endregion */
+.fluent-toast-provider {
+    z-index: 9999999999 !important;
+}

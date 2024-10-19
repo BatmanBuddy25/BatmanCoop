@@ -4,8 +4,6 @@
 
 
 <PageTitle>Member</PageTitle>
-
-
 <FluentStack Orientation="Orientation.Vertical" VerticalGap="16">
     <div style="width:100%;">
         <FluentGrid Justify="JustifyContent.SpaceBetween">
@@ -19,16 +17,11 @@
                     </button>
                 </FluentStack>
             </FluentGridItem>
-        </FluentGrid>
-        
+        </FluentGrid>        
     </div>
     <div class="main-page-box" style="width: 100%;">
         <div style="width: 100%;border-radius: 12px;">
-            <FluentDataGrid Items="@IList_Mem"
-                            Pagination="@pagination"
-                            ShowHover="true"
-                            GenerateHeader="GenerateHeaderOption.Sticky">
-
+            <FluentDataGrid Items="@IList_Mem" Pagination="@pagination" ShowHover="true" GenerateHeader="GenerateHeaderOption.Sticky">
                 <ChildContent>
                     <PropertyColumn Property="@(a => a.MemberNo)" Title="Member No." Width=".5fr" Sortable="true" />
                     <PropertyColumn Property="@(a => a.LastName)" Title="Last Name" Width=".5fr" Sortable="true" />
